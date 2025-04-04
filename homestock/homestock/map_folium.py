@@ -3,111 +3,72 @@
 
 # In[1]:
 
-
 import folium
-import geopandas as gpd
-import os
+from folium.plugins import SideBySideLayers
+from localtileserver import get_folium_tile_layer
+
 
 class Map:
     """
-    A custom folium-based map class for the homestock package,
-    supporting basemaps, layer control, and vector data visualization.
+    A simple wrapper around folium.Map to provide custom mapping utilities
+    including split-pane raster visualization using localtileserver.
+
+    Attributes
+    ----------
+    map : folium.Map
+        The folium Map object.
     """
 
-    def __init__(self, location=(0, 0), zoom_start=2):
+    def __init__(self, location=[0, 0], zoom_start=2, **kwargs):
         """
-        Initialize the Map.
+        Initialize the map with a given location and zoom level.
 
-        Parameters:
+        Parameters
         ----------
-        location : tuple
-            Center of the map in (lat, lon).
-        zoom_start : int
-            Initial zoom level.
+        location : list, optional
+            Initial center of the map [latitude, longitude] (default is [0, 0]).
+        zoom_start : int, optional
+            Initial zoom level (default is 2).
+        kwargs : dict
+            Additional keyword arguments passed to folium.Map.
         """
-        self.map = folium.Map(location=location, zoom_start=zoom_start)
-        self._layers = []
+        self.map = folium.Map(location=location, zoom_start=zoom_start, **kwargs)
 
-    def add_basemap(self, basemap_name: str):
+    def add_split_map(self, left_raster_path, right_raster_path, left_name='Left Layer', right_name='Right Layer'):
         """
-        Add a basemap to the map.
+        Add a split-pane viewer to the map for comparing two raster datasets.
 
-        Parameters:
+        This uses the Folium SideBySideLayers plugin along with the localtileserver
+        get_folium_tile_layer function to visualize two GeoTIFFs or tile layers side by side.
+
+        Parameters
         ----------
-        basemap_name : str
-            Name of the basemap. Supported values:
-            "OpenStreetMap", "Esri.WorldImagery", "OpenTopoMap".
+        left_raster_path : str
+            File path to the left raster dataset (e.g., GeoTIFF).
+        right_raster_path : str
+            File path to the right raster dataset (e.g., GeoTIFF).
+        left_name : str, optional
+            Display name for the left raster layer (default is 'Left Layer').
+        right_name : str, optional
+            Display name for the right raster layer (default is 'Right Layer').
 
-        Returns:
-        -------
-        None
-        """
-        tile_dict = {
-            "OpenStreetMap": "OpenStreetMap",
-            "Esri.WorldImagery": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            "OpenTopoMap": "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-        }
-
-        attr_dict = {
-            "Esri.WorldImagery": "Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye",
-            "OpenTopoMap": "© OpenTopoMap (CC-BY-SA)",
-        }
-
-        if basemap_name not in tile_dict:
-            raise ValueError(f"Unsupported basemap '{basemap_name}'.")
-
-        tile_url = tile_dict[basemap_name]
-        attr = attr_dict.get(basemap_name, basemap_name)
-
-        tile_layer = folium.TileLayer(tiles=tile_url, attr=attr, name=basemap_name)
-        tile_layer.add_to(self.map)
-        self._layers.append(tile_layer)
-
-    def add_layer_control(self):
-        """
-        Add a layer control widget to the map.
-
-        Returns:
-        -------
-        None
-        """
-        folium.LayerControl().add_to(self.map)
-
-    def add_vector(self, data, layer_name="Vector Layer"):
-        """
-        Add vector data to the map. Accepts file paths or GeoDataFrames.
-
-        Parameters:
-        ----------
-        data : str or geopandas.GeoDataFrame
-            Path to the vector data file or a GeoDataFrame.
-        layer_name : str
-            Name of the layer to display.
-
-        Returns:
-        -------
-        None
-        """
-        if isinstance(data, str):
-            if not os.path.exists(data):
-                raise FileNotFoundError(f"File '{data}' not found.")
-            gdf = gpd.read_file(data)
-        elif isinstance(data, gpd.GeoDataFrame):
-            gdf = data
-        else:
-            raise TypeError("Data must be a file path or a GeoDataFrame.")
-
-        geojson = folium.GeoJson(gdf, name=layer_name)
-        geojson.add_to(self.map)
-        self._layers.append(geojson)
-
-    def display(self):
-        """
-        Return the folium map object for display in Jupyter.
-
-        Returns:
+        Returns
         -------
         folium.Map
+            The map object with the split-pane layer added.
         """
+        # Generate tile layers for both rasters
+        left_layer = get_folium_tile_layer(left_raster_path, name=left_name)
+        right_layer = get_folium_tile_layer(right_raster_path, name=right_name)
+
+        # Add them to the map
+        left_layer.add_to(self.map)
+        right_layer.add_to(self.map)
+
+        # Add split map control
+        split_control = SideBySideLayers(left_layer, right_layer)
+        self.map.add_child(split_control)
+
         return self.map
+
 
