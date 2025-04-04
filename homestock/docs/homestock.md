@@ -1,4 +1,0 @@
-
-# homestock module
-
-::: homestock.homestock
