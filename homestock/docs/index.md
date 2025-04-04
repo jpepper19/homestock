@@ -11,7 +11,7 @@
 
 -   Free software: MIT License
 -   Documentation: <https://jpepper19.github.io/homestock>
-    
+
 
 ## Features
 
