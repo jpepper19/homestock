@@ -80,7 +80,8 @@ nav:
     - Changelog: changelog.md
     - Report Issues: https://github.com/jpepper19/homestock/issues
     - Examples:
-        - examples/intro.ipynb
+        - examples/map.py
+        - examples/map_folium.py
     - API Reference:
           - homestock module: homestock.md
           - common module: common.md
