@@ -8,6 +8,7 @@ flake8
 
 ipyleaflet
 ipykernel
+folium
 livereload
 mkdocs
 mkdocs-git-revision-date-localized-plugin
