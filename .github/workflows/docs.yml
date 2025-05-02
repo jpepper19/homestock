@@ -25,8 +25,8 @@ jobs:
             - name: Discover typos with codespell
               run: |
                   codespell --skip="*.csv,*.geojson,*.json,*.js,*.html,*cff,./.git" --ignore-words-list="aci,hist"
-            - name: PKG-TEST
+            - name: Run pytest
               run: |
-                  python -m unittest discover tests/
+                  pytest
             - run: mkdocs gh-deploy --force
 
