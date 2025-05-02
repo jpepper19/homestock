@@ -1,7 +1,6 @@
-'''
+"""
 Main Homestock Module.
-'''
-
+"""
 
 import ipyleaflet
 import folium
