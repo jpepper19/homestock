@@ -25,7 +25,6 @@ mkdocstrings-python-legacy
 nbconvert
 nbformat
 numpy
-pkg_resources
 pygments
 pymdown-extensions
 pytest>=7.0.0
