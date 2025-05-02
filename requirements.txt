@@ -10,6 +10,7 @@ ipyleaflet
 ipykernel
 ipywidgets
 folium
+geopandas
 livereload
 localtileserver
 matplotlib
