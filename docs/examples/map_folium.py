@@ -2,6 +2,7 @@ import folium
 import geopandas as gpd
 import os
 
+
 class Map:
     """
     A custom folium-based map class for the homestock package,

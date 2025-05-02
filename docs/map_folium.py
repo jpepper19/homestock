@@ -1,9 +1,9 @@
-
 # homestock module
 
 import folium
 import geopandas as gpd
 import os
+
 
 class Map:
     """

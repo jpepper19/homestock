@@ -1,7 +1,15 @@
 """Main module."""
-from ipyleaflet import Map as IpyleafletMap, basemaps, basemap_to_tiles, LayersControl, GeoData
+
+from ipyleaflet import (
+    Map as IpyleafletMap,
+    basemaps,
+    basemap_to_tiles,
+    LayersControl,
+    GeoData,
+)
 import geopandas as gpd
 import os
+
 
 class Map(IpyleafletMap):
     """
@@ -12,7 +20,7 @@ class Map(IpyleafletMap):
     def add_basemap(self, basemap_name: str):
         """
         Add a basemap to the map using a specified name.
-        
+
         Parameters:
         ----------
         basemap_name : str

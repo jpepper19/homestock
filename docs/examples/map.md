@@ -12,7 +12,7 @@ class Map(IpyleafletMap):
     def add_basemap(self, basemap_name: str):
         """
         Add a basemap to the map using a specified name.
-        
+
         Parameters:
         ----------
         basemap_name : str

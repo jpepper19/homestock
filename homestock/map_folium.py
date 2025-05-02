@@ -34,7 +34,13 @@ class Map:
         """
         self.map = folium.Map(location=location, zoom_start=zoom_start, **kwargs)
 
-    def add_split_map(self, left_raster_path, right_raster_path, left_name='Left Layer', right_name='Right Layer'):
+    def add_split_map(
+        self,
+        left_raster_path,
+        right_raster_path,
+        left_name="Left Layer",
+        right_name="Right Layer",
+    ):
         """
         Add a split-pane viewer to the map for comparing two raster datasets.
 
@@ -70,5 +76,3 @@ class Map:
         self.map.add_child(split_control)
 
         return self.map
-
-
