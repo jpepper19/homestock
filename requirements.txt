@@ -25,11 +25,13 @@ mkdocstrings-python-legacy
 nbconvert
 nbformat
 numpy
+pkg_resources
 pygments
 pymdown-extensions
 pytest>=7.0.0
 pytest-runner
 rasterio
+setuptools
 sphinx
 twine
 watchdog
