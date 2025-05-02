@@ -6,7 +6,9 @@ click
 codespell
 flake8
 ipykernel
+
 ipyleaflet
+folium
 livereload
 mkdocs
 mkdocs-git-revision-date-localized-plugin
