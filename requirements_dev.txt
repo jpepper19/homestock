@@ -21,7 +21,7 @@ nbconvert
 nbformat
 pygments
 pymdown-extensions
-pytest>=7.0.0
+pytest
 pytest-runner
 sphinx
 twine
