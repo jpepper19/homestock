@@ -5,12 +5,11 @@ bump-my-version
 click
 codespell
 flake8
-
-ipyleaflet
-ipykernel
-ipywidgets
 folium
 geopandas
+ipykernel
+ipyleaflet
+ipywidgets
 livereload
 localtileserver
 matplotlib

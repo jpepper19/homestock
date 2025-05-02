@@ -5,10 +5,9 @@ bump-my-version
 click
 codespell
 flake8
-ipykernel
-
-ipyleaflet
 folium
+ipykernel
+ipyleaflet
 livereload
 mkdocs
 mkdocs-git-revision-date-localized-plugin
