@@ -6,7 +6,6 @@ click
 codespell
 flake8
 ipykernel
-
 ipyleaflet
 folium
 livereload
