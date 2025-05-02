@@ -12,6 +12,7 @@ ipywidgets
 folium
 livereload
 localtileserver
+matplotlib
 mkdocs
 mkdocs-git-revision-date-localized-plugin
 mkdocs-git-revision-date-plugin
