@@ -8,8 +8,10 @@ flake8
 
 ipyleaflet
 ipykernel
+ipywidgets
 folium
 livereload
+localtileserver
 mkdocs
 mkdocs-git-revision-date-localized-plugin
 mkdocs-git-revision-date-plugin
@@ -26,6 +28,7 @@ pygments
 pymdown-extensions
 pytest>=7.0.0
 pytest-runner
+rasterio
 sphinx
 twine
 watchdog
