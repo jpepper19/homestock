@@ -5,7 +5,6 @@ bump-my-version
 click
 codespell
 flake8
-
 ipyleaflet
 ipykernel
 ipywidgets
