@@ -134,3 +134,9 @@ class Map(folium.Map):
         layer_left.add_to(self)
         layer_right.add_to(self)
         sbs.add_to(self)
+
+    def show_map(self):
+            """
+            Displays the folium map in the Jupyter notebook or Python script.
+            """
+            return self.map
