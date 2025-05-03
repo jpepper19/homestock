@@ -37,6 +37,12 @@ jobs:
             - name: Build docs
               run: |
                   mkdocs build
+            - name: Install project & docs dependencies
+              run: |
+                  pip install --upgrade typing_extensions
+                  pip install -e .
+                  pip install -r requirements_dev.txt
+            
             # - name: Deploy to Netlify
             #   uses: nwtgck/actions-netlify@v2.0
             #   with:
