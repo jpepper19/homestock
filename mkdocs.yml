@@ -80,3 +80,16 @@ nav:
       - folium module: folium_map.md
       - homestock module: homestock.md
 
+    - Home: index.md
+    - Installation: installation.md
+    - Usage: usage.md
+    - Contributing: contributing.md
+    - FAQ: faq.md
+    - Changelog: changelog.md
+    - Report Issues: https://github.com/jpepper19/homestock/issues
+    - Examples:
+          - homestock example: homestock_example.ipynb
+    - API Reference:
+          - common module: common.md
+          - folium module: folium_map.md
+          - homestock module: homestock.md
