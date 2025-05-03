@@ -80,6 +80,7 @@ nav:
     - Changelog: changelog.md
     - Report Issues: https://github.com/jpepper19/homestock/issues
     - Examples:
-        - examples/map.md
     - API Reference:
           - common module: common.md
+          - folium module: folium_map.md
+          - homestock module: homestock.md
