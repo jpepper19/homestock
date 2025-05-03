@@ -79,7 +79,6 @@ nav:
     - FAQ: faq.md
     - Changelog: changelog.md
     - Report Issues: https://github.com/jpepper19/homestock/issues
-    - Examples:
     - API Reference:
           - common module: common.md
           - folium module: folium_map.md
