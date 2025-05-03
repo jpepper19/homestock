@@ -3,9 +3,7 @@ site_description: homestock scrapes US Census Bureau data to calculate attainabl
 site_author: jpepper19
 site_url: https://jpepper19.github.io/homestock
 repo_url: https://github.com/jpepper19/homestock
-
 copyright: "Copyright &copy; 2024 - 2024 Joshua Pepper"
-
 theme:
     palette:
         - scheme: default
@@ -35,7 +33,6 @@ theme:
     font:
         text: Google Sans
         code: Regular
-
 plugins:
     - search
     - mkdocstrings
@@ -51,7 +48,6 @@ plugins:
           allow_errors: false
           ignore: ["conf.py"]
           execute_ignore: ["*ignore.ipynb"]
-
 markdown_extensions:
     - admonition
     - abbr
@@ -65,12 +61,10 @@ markdown_extensions:
           linenums: true
     - toc:
           permalink: true
-
 # extra:
 #     analytics:
 #         provider: google
 #         property: UA-XXXXXXXXX-X
-
 nav:
     - Home: index.md
     - Installation: installation.md
