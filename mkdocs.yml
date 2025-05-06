@@ -10,15 +10,18 @@ theme:
   name: material
   palette:
     - scheme: default
+      primary: green       
+      accent: light green  
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: green       
+      accent: light green
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+
   icon:
     repo: fontawesome/brands/github
   features:
