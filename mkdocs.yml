@@ -78,6 +78,4 @@ nav:
   - Examples:
       - Homestock Example: examples/homestock_example.ipynb
   - API Reference:
-      - common module: common.md
-      - folium module: folium_map.md
       - homestock module: homestock.md
