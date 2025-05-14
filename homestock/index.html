@@ -644,18 +644,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#homestock.homestock.CensusData.fetch_geography_data" class="md-nav__link">
+  <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
     <span class="md-ellipsis">
-      fetch_geography_data()
+      get_acs_data()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
+  <a href="#homestock.homestock.CensusData.get_acs_data_manually" class="md-nav__link">
     <span class="md-ellipsis">
-      get_acs_data()
+      get_acs_data_manually()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.search_census_tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      search_census_tables()
     </span>
   </a>
   
@@ -851,18 +860,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#homestock.homestock.CensusData.fetch_geography_data" class="md-nav__link">
+  <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
     <span class="md-ellipsis">
-      fetch_geography_data()
+      get_acs_data()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
+  <a href="#homestock.homestock.CensusData.get_acs_data_manually" class="md-nav__link">
     <span class="md-ellipsis">
-      get_acs_data()
+      get_acs_data_manually()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.search_census_tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      search_census_tables()
     </span>
   </a>
   
@@ -1059,6 +1077,30 @@ CensusData        </code>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_file</span><span class="o">=</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">table_file</span> <span class="o">=</span> <span class="n">table_file</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches the Census tables in acs_tables.csv based on a keyword.</span>
+<span class="sd">        Returns matching Table ID, Table Title, and Year in a formatted table.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prompt user for keyword input</span>
+        <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="n">matching_tables</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Read data from CSV file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">matching_tables</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]])</span>
+
+        <span class="c1"># Display results in a formatted table</span>
+        <span class="k">if</span> <span class="n">matching_tables</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matching Census Tables for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">matching_tables</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Table Title&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="p">],</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching Census Tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;. Try another term!&quot;</span><span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prompts user for inputs, fetches ACS data at various geographic levels,</span>
@@ -1244,7 +1286,7 @@ CensusData        </code>
                 <span class="k">return</span> <span class="n">dfs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
             <span class="k">return</span> <span class="n">dfs</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_geography_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data_manually</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
                             <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fetches data for specific geography and returns a pandas DataFrame.</span>
@@ -1348,111 +1390,6 @@ CensusData        </code>
 
 
 
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h3 id="homestock.homestock.CensusData.fetch_geography_data" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fetch_geography_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-
-<a href="#homestock.homestock.CensusData.fetch_geography_data" class="headerlink" title="Permanent link">&para;</a></h3>
-
-    <div class="doc doc-contents ">
-
-      <p>Fetches data for specific geography and returns a pandas DataFrame.
-Optionally saves the data to a CSV file.</p>
-      <p>c : Census
-    Census API client
-acs_survey : str
-    'acs1' or 'acs5'
-geography : str
-    Geographic level (e.g., 'State', 'County')
-year : int
-    Year of data
-fields : list
-    List of variable names to fetch
-state_fips : str
-    State FIPS code (if needed for geography)
-geo_params : dict
-    Additional geography-specific parameters
-save_csv : bool, optional
-    Whether to save the data to CSV (default False)
-output_dir : str, optional
-    Directory to save CSV (defaults to current directory)</p>
-      <p>pd.DataFrame
-    DataFrame containing the fetched data</p>
-
-        <details class="quote">
-          <summary>Source code in <code>homestock/homestock.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fetch_geography_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
-                        <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fetches data for specific geography and returns a pandas DataFrame.</span>
-<span class="sd">    Optionally saves the data to a CSV file.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
-<span class="sd">    c : Census</span>
-<span class="sd">        Census API client</span>
-<span class="sd">    acs_survey : str</span>
-<span class="sd">        &#39;acs1&#39; or &#39;acs5&#39;</span>
-<span class="sd">    geography : str</span>
-<span class="sd">        Geographic level (e.g., &#39;State&#39;, &#39;County&#39;)</span>
-<span class="sd">    year : int</span>
-<span class="sd">        Year of data</span>
-<span class="sd">    fields : list</span>
-<span class="sd">        List of variable names to fetch</span>
-<span class="sd">    state_fips : str</span>
-<span class="sd">        State FIPS code (if needed for geography)</span>
-<span class="sd">    geo_params : dict</span>
-<span class="sd">        Additional geography-specific parameters</span>
-<span class="sd">    save_csv : bool, optional</span>
-<span class="sd">        Whether to save the data to CSV (default False)</span>
-<span class="sd">    output_dir : str, optional</span>
-<span class="sd">        Directory to save CSV (defaults to current directory)</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
-<span class="sd">    pd.DataFrame</span>
-<span class="sd">        DataFrame containing the fetched data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Fetch the raw data</span>
-    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_data</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data returned for </span><span class="si">{</span><span class="n">geography</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-
-    <span class="c1"># Convert to DataFrame</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
-
-    <span class="c1"># Add metadata columns</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;survey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acs_survey</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;geography&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geography</span>
-
-    <span class="c1"># Save to CSV if requested</span>
-    <span class="k">if</span> <span class="n">save_csv</span><span class="p">:</span>
-        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># Create descriptive filename</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">geography</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.csv&quot;</span>
-        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-
-        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data saved to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">df</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
 
 
 
@@ -1658,6 +1595,159 @@ Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</p>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">years</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">dfs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">dfs</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="homestock.homestock.CensusData.get_acs_data_manually" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_acs_data_manually</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#homestock.homestock.CensusData.get_acs_data_manually" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Fetches data for specific geography and returns a pandas DataFrame.
+Optionally saves the data to a CSV file.</p>
+      <p>c : Census
+    Census API client
+acs_survey : str
+    'acs1' or 'acs5'
+geography : str
+    Geographic level (e.g., 'State', 'County')
+year : int
+    Year of data
+fields : list
+    List of variable names to fetch
+state_fips : str
+    State FIPS code (if needed for geography)
+geo_params : dict
+    Additional geography-specific parameters
+save_csv : bool, optional
+    Whether to save the data to CSV (default False)
+output_dir : str, optional
+    Directory to save CSV (defaults to current directory)</p>
+      <p>pd.DataFrame
+    DataFrame containing the fetched data</p>
+
+        <details class="quote">
+          <summary>Source code in <code>homestock/homestock.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data_manually</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
+                        <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches data for specific geography and returns a pandas DataFrame.</span>
+<span class="sd">    Optionally saves the data to a CSV file.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    c : Census</span>
+<span class="sd">        Census API client</span>
+<span class="sd">    acs_survey : str</span>
+<span class="sd">        &#39;acs1&#39; or &#39;acs5&#39;</span>
+<span class="sd">    geography : str</span>
+<span class="sd">        Geographic level (e.g., &#39;State&#39;, &#39;County&#39;)</span>
+<span class="sd">    year : int</span>
+<span class="sd">        Year of data</span>
+<span class="sd">    fields : list</span>
+<span class="sd">        List of variable names to fetch</span>
+<span class="sd">    state_fips : str</span>
+<span class="sd">        State FIPS code (if needed for geography)</span>
+<span class="sd">    geo_params : dict</span>
+<span class="sd">        Additional geography-specific parameters</span>
+<span class="sd">    save_csv : bool, optional</span>
+<span class="sd">        Whether to save the data to CSV (default False)</span>
+<span class="sd">    output_dir : str, optional</span>
+<span class="sd">        Directory to save CSV (defaults to current directory)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        DataFrame containing the fetched data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Fetch the raw data</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data returned for </span><span class="si">{</span><span class="n">geography</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="c1"># Convert to DataFrame</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+    <span class="c1"># Add metadata columns</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;survey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acs_survey</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;geography&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geography</span>
+
+    <span class="c1"># Save to CSV if requested</span>
+    <span class="k">if</span> <span class="n">save_csv</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Create descriptive filename</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">geography</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data saved to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="homestock.homestock.CensusData.search_census_tables" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">search_census_tables</span><span class="p">()</span></code>
+
+
+<a href="#homestock.homestock.CensusData.search_census_tables" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Searches the Census tables in acs_tables.csv based on a keyword.
+Returns matching Table ID, Table Title, and Year in a formatted table.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>homestock/homestock.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Searches the Census tables in acs_tables.csv based on a keyword.</span>
+<span class="sd">    Returns matching Table ID, Table Title, and Year in a formatted table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Prompt user for keyword input</span>
+    <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="n">matching_tables</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Read data from CSV file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">matching_tables</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]])</span>
+
+    <span class="c1"># Display results in a formatted table</span>
+    <span class="k">if</span> <span class="n">matching_tables</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matching Census Tables for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">matching_tables</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Table Title&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="p">],</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching Census Tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;. Try another term!&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
