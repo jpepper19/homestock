@@ -1036,10 +1036,10 @@ CensusData        </code>
 <span class="sd">        Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, Table Title, and Year in a formatted table.</span>
 
 <span class="sd">        **Parameters:**</span>
-<span class="sd">        | Parameter | Type | Description |</span>
-<span class="sd">        |-----------|------|-------------|</span>
-<span class="sd">        | `keyword` | `str` | Search term to match against table titles |</span>
-<span class="sd">        | `year` | `int`, optional | Filter results by specific year (default: None) |</span>
+<span class="sd">            | Parameter | Type | Description |</span>
+<span class="sd">            |-----------|------|-------------|</span>
+<span class="sd">            | `keyword` | `str` | Search term to match against table titles |</span>
+<span class="sd">            | `year` | `int`, optional | Filter results by specific year (default: None) |</span>
 
 <span class="sd">        **Returns:**</span>
 <span class="sd">        - `pd.DataFrame`: Formatted table of matching results</span>
@@ -1070,15 +1070,15 @@ CensusData        </code>
 <span class="sd">        Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, and offers CSV export option. Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</span>
 
 <span class="sd">        **Interactive prompts will request:**</span>
-<span class="sd">        - **API Key**: Your Census API key (required)</span>
-<span class="sd">        - **Table ID**: The ACS table ID (e.g., &quot;B19001&quot;)</span>
-<span class="sd">        - **Year(s)**: Comma-separated years (e.g., &quot;2018,2019,2020&quot;)</span>
-<span class="sd">        - **Survey Type**: &quot;1&quot; (1-year) or &quot;5&quot; (5-year ACS)</span>
-<span class="sd">        - **Geography Level**: Select from available options (State, County, etc.)</span>
-<span class="sd">        - **State Name**: If required for selected geography</span>
-<span class="sd">        - **County/Place Details**: If applicable for selected geography</span>
-<span class="sd">        - **CSV Export**: Option to save results (y/n)</span>
-<span class="sd">        - **Output Directory**: If CSV export selected</span>
+<span class="sd">            - **API Key**: Your Census API key (required)</span>
+<span class="sd">            - **Table ID**: The ACS table ID (e.g., &quot;B19001&quot;)</span>
+<span class="sd">            - **Year(s)**: Comma-separated years (e.g., &quot;2018,2019,2020&quot;)</span>
+<span class="sd">            - **Survey Type**: &quot;1&quot; (1-year) or &quot;5&quot; (5-year ACS)</span>
+<span class="sd">            - **Geography Level**: Select from available options (State, County, etc.)</span>
+<span class="sd">            - **State Name**: If required for selected geography</span>
+<span class="sd">            - **County/Place Details**: If applicable for selected geography</span>
+<span class="sd">            - **CSV Export**: Option to save results (y/n)</span>
+<span class="sd">            - **Output Directory**: If CSV export selected</span>
 
 <span class="sd">        **Returns:**</span>
 <span class="sd">        - Single `pd.DataFrame` if one year requested</span>
@@ -1272,17 +1272,17 @@ CensusData        </code>
 <span class="sd">        Optionally saves the data to a CSV file.</span>
 
 <span class="sd">        **Parameters:**</span>
-<span class="sd">        | Parameter | Type | Description |</span>
-<span class="sd">        |-----------|------|-------------|</span>
-<span class="sd">        | `c` | `Census` | Census API client |</span>
-<span class="sd">        | `acs_survey` | `str` | &#39;acs1&#39; or &#39;acs5&#39; |</span>
-<span class="sd">        | `geography` | `str` | Geographic level (e.g., &#39;State&#39;, &#39;County&#39;) |</span>
-<span class="sd">        | `year` | `int` | Year of data |</span>
-<span class="sd">        | `fields` | `list` | List of variable names to fetch |</span>
-<span class="sd">        | `state_fips` | `str` | State FIPS code (if needed for geography) |</span>
-<span class="sd">        | `geo_params` | `dict` | Additional geography-specific parameters |</span>
-<span class="sd">        | `save_csv` | `bool`, optional | Whether to save the data to CSV (default: `False`) |</span>
-<span class="sd">        | `output_dir` | `str`, optional | Directory to save CSV (defaults to current directory) |</span>
+<span class="sd">            | Parameter | Type | Description |</span>
+<span class="sd">            |-----------|------|-------------|</span>
+<span class="sd">            | `c` | `Census` | Census API client |</span>
+<span class="sd">            | `acs_survey` | `str` | &#39;acs1&#39; or &#39;acs5&#39; |</span>
+<span class="sd">            | `geography` | `str` | Geographic level (e.g., &#39;State&#39;, &#39;County&#39;) |</span>
+<span class="sd">            | `year` | `int` | Year of data |</span>
+<span class="sd">            | `fields` | `list` | List of variable names to fetch |</span>
+<span class="sd">            | `state_fips` | `str` | State FIPS code (if needed for geography) |</span>
+<span class="sd">            | `geo_params` | `dict` | Additional geography-specific parameters |</span>
+<span class="sd">            | `save_csv` | `bool`, optional | Whether to save the data to CSV (default: `False`) |</span>
+<span class="sd">            | `output_dir` | `str`, optional | Directory to save CSV (defaults to current directory) |</span>
 
 <span class="sd">        **Returns:**</span>
 <span class="sd">        - `pd.DataFrame`: DataFrame containing the fetched data</span>
@@ -1378,15 +1378,15 @@ CensusData        </code>
 
       <p>Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, and offers CSV export option. Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</p>
 <p><strong>Interactive prompts will request:</strong>
-- <strong>API Key</strong>: Your Census API key (required)
-- <strong>Table ID</strong>: The ACS table ID (e.g., "B19001")
-- <strong>Year(s)</strong>: Comma-separated years (e.g., "2018,2019,2020")
-- <strong>Survey Type</strong>: "1" (1-year) or "5" (5-year ACS)
-- <strong>Geography Level</strong>: Select from available options (State, County, etc.)
-- <strong>State Name</strong>: If required for selected geography
-- <strong>County/Place Details</strong>: If applicable for selected geography
-- <strong>CSV Export</strong>: Option to save results (y/n)
-- <strong>Output Directory</strong>: If CSV export selected</p>
+    - <strong>API Key</strong>: Your Census API key (required)
+    - <strong>Table ID</strong>: The ACS table ID (e.g., "B19001")
+    - <strong>Year(s)</strong>: Comma-separated years (e.g., "2018,2019,2020")
+    - <strong>Survey Type</strong>: "1" (1-year) or "5" (5-year ACS)
+    - <strong>Geography Level</strong>: Select from available options (State, County, etc.)
+    - <strong>State Name</strong>: If required for selected geography
+    - <strong>County/Place Details</strong>: If applicable for selected geography
+    - <strong>CSV Export</strong>: Option to save results (y/n)
+    - <strong>Output Directory</strong>: If CSV export selected</p>
 <p><strong>Returns:</strong>
 - Single <code>pd.DataFrame</code> if one year requested
 - Dictionary of <code>{year: pd.DataFrame}</code> if multiple years requested</p>
@@ -1399,15 +1399,15 @@ CensusData        </code>
 <span class="sd">    Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, and offers CSV export option. Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</span>
 
 <span class="sd">    **Interactive prompts will request:**</span>
-<span class="sd">    - **API Key**: Your Census API key (required)</span>
-<span class="sd">    - **Table ID**: The ACS table ID (e.g., &quot;B19001&quot;)</span>
-<span class="sd">    - **Year(s)**: Comma-separated years (e.g., &quot;2018,2019,2020&quot;)</span>
-<span class="sd">    - **Survey Type**: &quot;1&quot; (1-year) or &quot;5&quot; (5-year ACS)</span>
-<span class="sd">    - **Geography Level**: Select from available options (State, County, etc.)</span>
-<span class="sd">    - **State Name**: If required for selected geography</span>
-<span class="sd">    - **County/Place Details**: If applicable for selected geography</span>
-<span class="sd">    - **CSV Export**: Option to save results (y/n)</span>
-<span class="sd">    - **Output Directory**: If CSV export selected</span>
+<span class="sd">        - **API Key**: Your Census API key (required)</span>
+<span class="sd">        - **Table ID**: The ACS table ID (e.g., &quot;B19001&quot;)</span>
+<span class="sd">        - **Year(s)**: Comma-separated years (e.g., &quot;2018,2019,2020&quot;)</span>
+<span class="sd">        - **Survey Type**: &quot;1&quot; (1-year) or &quot;5&quot; (5-year ACS)</span>
+<span class="sd">        - **Geography Level**: Select from available options (State, County, etc.)</span>
+<span class="sd">        - **State Name**: If required for selected geography</span>
+<span class="sd">        - **County/Place Details**: If applicable for selected geography</span>
+<span class="sd">        - **CSV Export**: Option to save results (y/n)</span>
+<span class="sd">        - **Output Directory**: If CSV export selected</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    - Single `pd.DataFrame` if one year requested</span>
@@ -1616,17 +1616,17 @@ CensusData        </code>
       <p>Fetches data for specific geography and returns a pandas DataFrame.
 Optionally saves the data to a CSV file.</p>
 <p><strong>Parameters:</strong>
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| <code>c</code> | <code>Census</code> | Census API client |
-| <code>acs_survey</code> | <code>str</code> | 'acs1' or 'acs5' |
-| <code>geography</code> | <code>str</code> | Geographic level (e.g., 'State', 'County') |
-| <code>year</code> | <code>int</code> | Year of data |
-| <code>fields</code> | <code>list</code> | List of variable names to fetch |
-| <code>state_fips</code> | <code>str</code> | State FIPS code (if needed for geography) |
-| <code>geo_params</code> | <code>dict</code> | Additional geography-specific parameters |
-| <code>save_csv</code> | <code>bool</code>, optional | Whether to save the data to CSV (default: <code>False</code>) |
-| <code>output_dir</code> | <code>str</code>, optional | Directory to save CSV (defaults to current directory) |</p>
+    | Parameter | Type | Description |
+    |-----------|------|-------------|
+    | <code>c</code> | <code>Census</code> | Census API client |
+    | <code>acs_survey</code> | <code>str</code> | 'acs1' or 'acs5' |
+    | <code>geography</code> | <code>str</code> | Geographic level (e.g., 'State', 'County') |
+    | <code>year</code> | <code>int</code> | Year of data |
+    | <code>fields</code> | <code>list</code> | List of variable names to fetch |
+    | <code>state_fips</code> | <code>str</code> | State FIPS code (if needed for geography) |
+    | <code>geo_params</code> | <code>dict</code> | Additional geography-specific parameters |
+    | <code>save_csv</code> | <code>bool</code>, optional | Whether to save the data to CSV (default: <code>False</code>) |
+    | <code>output_dir</code> | <code>str</code>, optional | Directory to save CSV (defaults to current directory) |</p>
 <p><strong>Returns:</strong>
 - <code>pd.DataFrame</code>: DataFrame containing the fetched data</p>
 <p><strong>Source code in:</strong> <code>homestock/homestock.py</code></p>
@@ -1640,17 +1640,17 @@ Optionally saves the data to a CSV file.</p>
 <span class="sd">    Optionally saves the data to a CSV file.</span>
 
 <span class="sd">    **Parameters:**</span>
-<span class="sd">    | Parameter | Type | Description |</span>
-<span class="sd">    |-----------|------|-------------|</span>
-<span class="sd">    | `c` | `Census` | Census API client |</span>
-<span class="sd">    | `acs_survey` | `str` | &#39;acs1&#39; or &#39;acs5&#39; |</span>
-<span class="sd">    | `geography` | `str` | Geographic level (e.g., &#39;State&#39;, &#39;County&#39;) |</span>
-<span class="sd">    | `year` | `int` | Year of data |</span>
-<span class="sd">    | `fields` | `list` | List of variable names to fetch |</span>
-<span class="sd">    | `state_fips` | `str` | State FIPS code (if needed for geography) |</span>
-<span class="sd">    | `geo_params` | `dict` | Additional geography-specific parameters |</span>
-<span class="sd">    | `save_csv` | `bool`, optional | Whether to save the data to CSV (default: `False`) |</span>
-<span class="sd">    | `output_dir` | `str`, optional | Directory to save CSV (defaults to current directory) |</span>
+<span class="sd">        | Parameter | Type | Description |</span>
+<span class="sd">        |-----------|------|-------------|</span>
+<span class="sd">        | `c` | `Census` | Census API client |</span>
+<span class="sd">        | `acs_survey` | `str` | &#39;acs1&#39; or &#39;acs5&#39; |</span>
+<span class="sd">        | `geography` | `str` | Geographic level (e.g., &#39;State&#39;, &#39;County&#39;) |</span>
+<span class="sd">        | `year` | `int` | Year of data |</span>
+<span class="sd">        | `fields` | `list` | List of variable names to fetch |</span>
+<span class="sd">        | `state_fips` | `str` | State FIPS code (if needed for geography) |</span>
+<span class="sd">        | `geo_params` | `dict` | Additional geography-specific parameters |</span>
+<span class="sd">        | `save_csv` | `bool`, optional | Whether to save the data to CSV (default: `False`) |</span>
+<span class="sd">        | `output_dir` | `str`, optional | Directory to save CSV (defaults to current directory) |</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    - `pd.DataFrame`: DataFrame containing the fetched data</span>
@@ -1707,10 +1707,10 @@ Optionally saves the data to a CSV file.</p>
 
       <p>Searches the Census tables in <code>acs_tables.csv</code> based on a keyword. Returns matching Table ID, Table Title, and Year in a formatted table.</p>
 <p><strong>Parameters:</strong>
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| <code>keyword</code> | <code>str</code> | Search term to match against table titles |
-| <code>year</code> | <code>int</code>, optional | Filter results by specific year (default: None) |</p>
+    | Parameter | Type | Description |
+    |-----------|------|-------------|
+    | <code>keyword</code> | <code>str</code> | Search term to match against table titles |
+    | <code>year</code> | <code>int</code>, optional | Filter results by specific year (default: None) |</p>
 <p><strong>Returns:</strong>
 - <code>pd.DataFrame</code>: Formatted table of matching results</p>
 <p><strong>Source code in:</strong> <code>homestock/homestock.py</code></p>
@@ -1722,10 +1722,10 @@ Optionally saves the data to a CSV file.</p>
 <span class="sd">    Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, Table Title, and Year in a formatted table.</span>
 
 <span class="sd">    **Parameters:**</span>
-<span class="sd">    | Parameter | Type | Description |</span>
-<span class="sd">    |-----------|------|-------------|</span>
-<span class="sd">    | `keyword` | `str` | Search term to match against table titles |</span>
-<span class="sd">    | `year` | `int`, optional | Filter results by specific year (default: None) |</span>
+<span class="sd">        | Parameter | Type | Description |</span>
+<span class="sd">        |-----------|------|-------------|</span>
+<span class="sd">        | `keyword` | `str` | Search term to match against table titles |</span>
+<span class="sd">        | `year` | `int`, optional | Filter results by specific year (default: None) |</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    - `pd.DataFrame`: Formatted table of matching results</span>
