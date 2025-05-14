@@ -314,6 +314,30 @@ class CensusData:
     def __init__(self, table_file="acs_tables.csv"):
         self.table_file = table_file
 
+    def search_census_tables():
+        """
+        Searches the Census tables in acs_tables.csv based on a keyword.
+        Returns matching Table ID, Table Title, and Year in a formatted table.
+        """
+        # Prompt user for keyword input
+        keyword = input("Enter a keyword to search Census tables: ").lower()
+        
+        matching_tables = []
+    
+        # Read data from CSV file
+        with open("acs_tables.csv", mode="r", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if keyword in row["Table Title"].lower():
+                    matching_tables.append([row["Table ID"], row["Table Title"], row["Year"]])
+    
+        # Display results in a formatted table
+        if matching_tables:
+            print(f"\nMatching Census Tables for '{keyword}':\n")
+            print(tabulate(matching_tables, headers=["Table ID", "Table Title", "Year"], tablefmt="grid"))
+        else:
+            print(f"\nNo matching Census Tables found for '{keyword}'. Try another term!")
+    
     def get_acs_data():
         """
         Prompts user for inputs, fetches ACS data at various geographic levels,
@@ -499,7 +523,7 @@ class CensusData:
                 return dfs.get(years[0], pd.DataFrame())
             return dfs
 
-    def fetch_geography_data(c, acs_survey, geography, year, fields, state_fips, geo_params, 
+    def get_acs_data_manually(c, acs_survey, geography, year, fields, state_fips, geo_params, 
                             save_csv=False, output_dir=None):
         """
         Fetches data for specific geography and returns a pandas DataFrame.
