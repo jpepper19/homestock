@@ -6,4 +6,4 @@ __all__ = ['CensusData', 'Map']  # Explicitly define what gets imported with `fr
 
 __author__ = """Joshua Pepper"""
 __email__ = "jepepper19@gmail.com"
-__version__ = "1.6.4"  # Update to match your current version
+__version__ = "1.6.5"  # Update to match your current version
