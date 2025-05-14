@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write  # 🔑 Critical for OIDC authentication
-      contents: read   # Optional but recommended
+      id-token: write  # Required for OIDC
+      contents: read   # Required to checkout code
 
     steps:
       - uses: actions/checkout@v3
@@ -26,9 +26,13 @@ jobs:
       - name: Build the package
         run: python -m build
 
-      - name: Publish to PyPI
+      - name: Publish to PyPI (OIDC or Token Fallback)
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          trusted-publisher: true  # ✅ Enables OIDC (no token needed)
-          skip-existing: true      # Avoid errors on duplicate uploads
+          # Try OIDC first (recommended)
+          trusted-publisher: true
+          # Fallback to API token if OIDC fails
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          skip-existing: true  # Skip if version already exists
 
