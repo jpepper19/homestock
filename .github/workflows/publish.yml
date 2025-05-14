@@ -3,11 +3,14 @@ name: Publish to PyPI
 on:
   push:
     tags:
-      - "v*.*.*"  # only runs on version tags
+      - "v*.*.*"  # Trigger on version tags (e.g., v1.6.0)
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # 🔑 Critical for OIDC authentication
+      contents: read   # Optional but recommended
 
     steps:
       - uses: actions/checkout@v3
@@ -26,6 +29,6 @@ jobs:
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          # No password or API token needed for Trusted Publishing
-          skip-existing: true  # Optional, avoids errors on duplicate uploads
+          trusted-publisher: true  # ✅ Enables OIDC (no token needed)
+          skip-existing: true      # Avoid errors on duplicate uploads
 
