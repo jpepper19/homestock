@@ -312,35 +312,55 @@ class Map(ipyleaflet.Map):
 
 class CensusData:
     def __init__(self, table_file="acs_tables.csv"):
-        self.table_file = table_file
+        """Initialize CensusData with optional custom table file.
+        
+        Args:
+            table_file (str): Filename of ACS tables CSV. Defaults to "acs_tables.csv".
+        """
+        # Get absolute path to the CSV file
+        self.table_path = Path(__file__).parent / table_file
+        
+        # Verify file exists at initialization
+        if not self.table_path.exists():
+            raise FileNotFoundError(f"ACS tables file not found at: {self.table_path}")
 
-    def search_census_tables():
+    def search_census_tables(self, keyword=None):
         """Search the Census tables based on a keyword.
         
         Args:
-            keyword (str): Keyword from ACS table title.
+            keyword (str, optional): Keyword to search in table titles. If None, prompts user.
             
         Returns:
-            pd.DataFrame: Formatted table of matching results generated from the keyword.
+            pd.DataFrame: Contains columns 'Table ID', 'Table Title', and 'Year'.
         """
-        # Prompt user for keyword input
-        keyword = input("Enter a keyword to search Census tables: ").lower()
+        # Get keyword input if not provided
+        if keyword is None:
+            keyword = input("Enter a keyword to search Census tables: ").lower()
         
         matching_tables = []
-    
-        # Read data from CSV file
-        with open("acs_tables.csv", mode="r", encoding="utf-8") as file:
+        
+        # Read data using absolute path
+        with open(self.table_path, mode="r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if keyword in row["Table Title"].lower():
-                    matching_tables.append([row["Table ID"], row["Table Title"], row["Year"]])
-    
-        # Display results in a formatted table
-        if matching_tables:
+                    matching_tables.append({
+                        "Table ID": row["Table ID"],
+                        "Table Title": row["Table Title"], 
+                        "Year": row["Year"]
+                    })
+        
+        # Convert to DataFrame
+        result = pd.DataFrame(matching_tables)
+        
+        # Print formatted output
+        if not result.empty:
             print(f"\nMatching Census Tables for '{keyword}':\n")
-            print(tabulate(matching_tables, headers=["Table ID", "Table Title", "Year"], tablefmt="grid"))
+            print(tabulate(result, headers="keys", tablefmt="grid", showindex=False))
         else:
-            print(f"\nNo matching Census Tables found for '{keyword}'. Try another term!")
+            print(f"\nNo matching tables found for '{keyword}'")
+            
+        return result
     
     def get_acs_data():
         """Fetch ACS data at various geographic levels with interactive prompts.
