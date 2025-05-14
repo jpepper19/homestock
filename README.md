@@ -8,6 +8,7 @@
 
 Whether you're exploring patterns at the state level or diving deep into neighborhoods using census tracts and block groups, **homestock** provides a flexible, scriptable workflow for researchers, students, journalists, and developers.
 
+## First, get yourself a [Census API key](https://api.census.gov/data/key_signup.html).
 ---
 
 ## 📊 What is the ACS?
