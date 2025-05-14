@@ -55,11 +55,5 @@ There are two primary types of ACS data products:
 - 🔍 **Explore metadata** dynamically using Census variable labels
 - 🗺️ **Use results in mapping tools** like `folium`, `geopandas`, or `leafmap`
 
----
-
-## 📦 Install
-
-```bash
-pip install homestock
 
 
