@@ -7,13 +7,11 @@
 [![image](https://pyup.io/repos/github/jpepper19/homestock/shield.svg)](https://pyup.io/repos/github/jpepper19/homestock)
 
 
-**homestock scrapes US Census Bureau data to calculate attainable housing stock for each census tract within a selected county.**
+**homestock makes it easier to access and visualize US Census Bureau American Community Survey data in Python.**
 
 
 -   Free software: MIT License
--   Documentation: https://jpepper19.github.io/homestock
 
 
 ## Features
 
--   TODO
