@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-homestock" class="md-skip">
+        <a href="#homestock" class="md-skip">
           Skip to content
         </a>
       
@@ -646,13 +646,106 @@
   
 
 
-<h1 id="welcome-to-homestock">Welcome to homestock<a class="headerlink" href="#welcome-to-homestock" title="Permanent link">&para;</a></h1>
+<h1 id="homestock">🏡 homestock<a class="headerlink" href="#homestock" title="Permanent link">&para;</a></h1>
 <p><a href="https://pypi.python.org/pypi/homestock"><img alt="image" src="https://img.shields.io/pypi/v/homestock.svg" /></a></p>
 <p><a href="https://pyup.io/repos/github/jpepper19/homestock"><img alt="image" src="https://pyup.io/repos/github/jpepper19/homestock/shield.svg" /></a></p>
-<p><strong>homestock makes it easier to access and visualize US Census Bureau American Community Survey data in Python.</strong></p>
+<h1 id="homestock_1">🏡 homestock<a class="headerlink" href="#homestock_1" title="Permanent link">&para;</a></h1>
+<p><strong>homestock</strong> is a Python package designed to simplify access to <strong>American Community Survey (ACS)</strong> data from the U.S. Census Bureau. It enables users to fetch detailed demographic, housing, and economic data, and seamlessly convert the results into <code>pandas</code> DataFrames or CSV files for further analysis.</p>
+<p>Whether you're exploring patterns at the state level or diving deep into neighborhoods using census tracts and block groups, <strong>homestock</strong> provides a flexible, scriptable workflow for researchers, students, journalists, and developers.</p>
+<hr />
+<h2 id="what-is-the-acs">📊 What is the ACS?<a class="headerlink" href="#what-is-the-acs" title="Permanent link">&para;</a></h2>
+<p>The <strong>American Community Survey (ACS)</strong> is an ongoing survey conducted by the U.S. Census Bureau that collects vital information on income, education, housing, employment, and more.</p>
+<p>There are two primary types of ACS data products:</p>
+<h3 id="1-year-estimates">🔹 1-Year Estimates<a class="headerlink" href="#1-year-estimates" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Free software: MIT License</li>
+<li>Based on data collected over <strong>12 months</strong></li>
+<li>Available for <strong>areas with populations of 65,000+</strong></li>
+<li>Best for analyzing <strong>current trends</strong> in large cities or regions</li>
+<li>Less stable for small populations due to smaller sample size</li>
 </ul>
+<h3 id="5-year-estimates">🔸 5-Year Estimates<a class="headerlink" href="#5-year-estimates" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Based on data collected over <strong>60 months (5 years)</strong></li>
+<li>Available for <strong>all geographic areas</strong>, down to <strong>block groups</strong></li>
+<li>Best for <strong>granular spatial analysis</strong> or long-term planning</li>
+<li>More reliable for small population areas</li>
+</ul>
+<hr />
+<h2 id="supported-geographic-levels">🗺️ Supported Geographic Levels<a class="headerlink" href="#supported-geographic-levels" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Geographic Level</th>
+<th>Description</th>
+<th>Available In</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nation</strong></td>
+<td>Entire United States</td>
+<td>1-Year, 5-Year</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>Individual U.S. states</td>
+<td>1-Year, 5-Year</td>
+</tr>
+<tr>
+<td><strong>County</strong></td>
+<td>Counties within states</td>
+<td>1-Year, 5-Year</td>
+</tr>
+<tr>
+<td><strong>County Subdivision</strong></td>
+<td>Minor civil divisions (e.g., townships)</td>
+<td>5-Year only</td>
+</tr>
+<tr>
+<td><strong>Place</strong></td>
+<td>Incorporated places (cities, towns)</td>
+<td>1-Year, 5-Year</td>
+</tr>
+<tr>
+<td><strong>ZIP Code Tabulation Area (ZCTA)</strong></td>
+<td>Approximated ZIP Code boundaries</td>
+<td>5-Year only</td>
+</tr>
+<tr>
+<td><strong>Metropolitan/Micropolitan Area</strong></td>
+<td>Census-defined metro or micro areas</td>
+<td>1-Year, 5-Year</td>
+</tr>
+<tr>
+<td><strong>Census Tract</strong></td>
+<td>Small subdivisions of counties (~4,000 residents)</td>
+<td>5-Year only</td>
+</tr>
+<tr>
+<td><strong>Block Group</strong></td>
+<td>Subdivisions of tracts (~600–3,000 residents)</td>
+<td>5-Year only</td>
+</tr>
+<tr>
+<td><strong>Block</strong></td>
+<td>The smallest geography (~40–100 people)</td>
+<td>5-Year only</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="what-can-you-do-with-homestock">⚙️ What Can You Do with homestock?<a class="headerlink" href="#what-can-you-do-with-homestock" title="Permanent link">&para;</a></h2>
+<ul>
+<li>🧩 <strong>Pull specific ACS tables</strong> by table ID (e.g., <code>B19013</code> for median household income)</li>
+<li>📁 <strong>Convert results</strong> to <code>pandas</code> DataFrames or export them as <code>.csv</code></li>
+<li>🌐 <strong>Query different geographic levels</strong>, from national down to individual blocks</li>
+<li>🔍 <strong>Explore metadata</strong> dynamically using Census variable labels</li>
+<li>🗺️ <strong>Use results in mapping tools</strong> like <code>folium</code>, <code>geopandas</code>, or <code>leafmap</code></li>
+</ul>
+<hr />
+<h2 id="install">📦 Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>```bash
+pip install homestock</p>
 
 
 
@@ -675,7 +768,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="May 14, 2025 02:17:19"><span class="timeago" datetime="2025-05-14T02:17:19+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 14, 2025 02:17:19">2025-05-14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="May 14, 2025 02:26:59"><span class="timeago" datetime="2025-05-14T02:26:59+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="May 14, 2025 02:26:59">2025-05-14</span>
   </span>
 
     
