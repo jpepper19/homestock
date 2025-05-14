@@ -4,8 +4,6 @@
 
 [![image](https://pyup.io/repos/github/jpepper19/homestock/shield.svg)](https://pyup.io/repos/github/jpepper19/homestock)
 
-# 🏡 homestock
-
 **homestock** is a Python package designed to simplify access to **American Community Survey (ACS)** data from the U.S. Census Bureau. It enables users to fetch detailed demographic, housing, and economic data, and seamlessly convert the results into `pandas` DataFrames or CSV files for further analysis.
 
 Whether you're exploring patterns at the state level or diving deep into neighborhoods using census tracts and block groups, **homestock** provides a flexible, scriptable workflow for researchers, students, journalists, and developers.
