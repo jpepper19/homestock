@@ -2,6 +2,8 @@ black
 black[jupyter]
 build
 bump-my-version
+census
+csv
 click
 codespell
 flake8
@@ -30,8 +32,11 @@ pymdown-extensions
 pytest>=7.0.0
 pytest-runner
 rasterio
+requests
 setuptools
 sphinx
+tabulate
 twine
+us
 watchdog
 wheel
