@@ -1,6 +1,6 @@
 # 🏡 homestock
 
-[![image](https://img.shields.io/pypi/v/homestock.svg)](https://pypi.python.org/pypi/homestock)
+[![image](https://img.shields.io/pypi/v/homestock.svg)](https://pypi.org/project/homestock/)
 
 [![image](https://pyup.io/repos/github/jpepper19/homestock/shield.svg)](https://pyup.io/repos/github/jpepper19/homestock)
 
