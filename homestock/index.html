@@ -598,6 +598,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
     <span class="md-ellipsis">
       get_acs_data()
@@ -812,6 +821,15 @@
   
     <nav class="md-nav" aria-label="CensusData">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
@@ -1029,35 +1047,55 @@ CensusData        </code>
           <summary>Source code in <code>homestock/homestock.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CensusData</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_file</span><span class="o">=</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table_file</span> <span class="o">=</span> <span class="n">table_file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize CensusData with optional custom table file.</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">():</span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_file (str): Filename of ACS tables CSV. Defaults to &quot;acs_tables.csv&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get absolute path to the CSV file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">table_file</span>
+
+        <span class="c1"># Verify file exists at initialization</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">table_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ACS tables file not found at: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">table_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Search the Census tables based on a keyword.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            keyword (str): Keyword from ACS table title.</span>
+<span class="sd">            keyword (str, optional): Keyword to search in table titles. If None, prompts user.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            pd.DataFrame: Formatted table of matching results generated from the keyword.</span>
+<span class="sd">            pd.DataFrame: Contains columns &#39;Table ID&#39;, &#39;Table Title&#39;, and &#39;Year&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Prompt user for keyword input</span>
-        <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="c1"># Get keyword input if not provided</span>
+        <span class="k">if</span> <span class="n">keyword</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
         <span class="n">matching_tables</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># Read data from CSV file</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="c1"># Read data using absolute path</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-                    <span class="n">matching_tables</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]])</span>
+                    <span class="n">matching_tables</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s2">&quot;Table ID&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;Table Title&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">],</span> 
+                        <span class="s2">&quot;Year&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]</span>
+                    <span class="p">})</span>
 
-        <span class="c1"># Display results in a formatted table</span>
-        <span class="k">if</span> <span class="n">matching_tables</span><span class="p">:</span>
+        <span class="c1"># Convert to DataFrame</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matching_tables</span><span class="p">)</span>
+
+        <span class="c1"># Print formatted output</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matching Census Tables for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">matching_tables</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Table Title&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="p">],</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="n">showindex</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching Census Tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;. Try another term!&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch ACS data at various geographic levels with interactive prompts.</span>
@@ -1347,6 +1385,63 @@ CensusData        </code>
 
 
 
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="homestock.homestock.CensusData.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_file</span><span class="o">=</span><span class="s1">&#39;acs_tables.csv&#39;</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+<a href="#homestock.homestock.CensusData.__init__" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialize CensusData with optional custom table file.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>table_file</code></td>
+        <td><code>str</code></td>
+        <td><p>Filename of ACS tables CSV. Defaults to "acs_tables.csv".</p></td>
+        <td><code>&#39;acs_tables.csv&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>homestock/homestock.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_file</span><span class="o">=</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize CensusData with optional custom table file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        table_file (str): Filename of ACS tables CSV. Defaults to &quot;acs_tables.csv&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get absolute path to the CSV file</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">table_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">table_file</span>
+
+    <span class="c1"># Verify file exists at initialization</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">table_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ACS tables file not found at: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">table_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
@@ -1758,7 +1853,7 @@ dict: Dictionary of {year: pd.DataFrame} if multiple years requested</p></td>
 
 
 <h3 id="homestock.homestock.CensusData.search_census_tables" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">search_census_tables</span><span class="p">()</span></code>
+<code class="highlight language-python"><span class="n">search_census_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#homestock.homestock.CensusData.search_census_tables" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -1781,8 +1876,8 @@ dict: Dictionary of {year: pd.DataFrame} if multiple years requested</p></td>
       <tr>
         <td><code>keyword</code></td>
         <td><code>str</code></td>
-        <td><p>Keyword from ACS table title.</p></td>
-        <td><em>required</em></td>
+        <td><p>Keyword to search in table titles. If None, prompts user.</p></td>
+        <td><code>None</code></td>
       </tr>
   </tbody>
 </table>
@@ -1797,39 +1892,49 @@ dict: Dictionary of {year: pd.DataFrame} if multiple years requested</p></td>
   <tbody>
     <tr>
       <td><code>pd.DataFrame</code></td>
-      <td><p>Formatted table of matching results generated from the keyword.</p></td>
+      <td><p>Contains columns 'Table ID', 'Table Title', and 'Year'.</p></td>
     </tr>
   </tbody>
 </table>
         <details class="quote">
           <summary>Source code in <code>homestock/homestock.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">():</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Search the Census tables based on a keyword.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        keyword (str): Keyword from ACS table title.</span>
+<span class="sd">        keyword (str, optional): Keyword to search in table titles. If None, prompts user.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        pd.DataFrame: Formatted table of matching results generated from the keyword.</span>
+<span class="sd">        pd.DataFrame: Contains columns &#39;Table ID&#39;, &#39;Table Title&#39;, and &#39;Year&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Prompt user for keyword input</span>
-    <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="c1"># Get keyword input if not provided</span>
+    <span class="k">if</span> <span class="n">keyword</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="n">matching_tables</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># Read data from CSV file</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="c1"># Read data using absolute path</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-                <span class="n">matching_tables</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]])</span>
+                <span class="n">matching_tables</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;Table ID&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;Table Title&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Table Title&quot;</span><span class="p">],</span> 
+                    <span class="s2">&quot;Year&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]</span>
+                <span class="p">})</span>
 
-    <span class="c1"># Display results in a formatted table</span>
-    <span class="k">if</span> <span class="n">matching_tables</span><span class="p">:</span>
+    <span class="c1"># Convert to DataFrame</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matching_tables</span><span class="p">)</span>
+
+    <span class="c1"># Print formatted output</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matching Census Tables for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">matching_tables</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Table ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Table Title&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="p">],</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="n">showindex</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching Census Tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;. Try another term!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
 </code></pre></div>
         </details>
     </div>
