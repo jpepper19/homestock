@@ -357,7 +357,7 @@ class CensusData:
             
         return result
     
-    def get_acs_data():
+    def get_acs_data(self):
         """Fetch ACS data at various geographic levels with interactive prompts.
         
         Prompts user for inputs, fetches ACS data at various geographic levels, 
