@@ -77,7 +77,6 @@ nav:
   - Report Issues: https://github.com/jpepper19/homestock/issues
   - Examples:
       - Homestock Example: examples/homestock_example.ipynb
-      - Lab 7 Raster & Image: examples/Lab7_Raster_Image_Examples.ipynb
   - API Reference:
       - common module: common.md
       - folium module: folium_map.md
