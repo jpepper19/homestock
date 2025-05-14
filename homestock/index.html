@@ -634,6 +634,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData" class="md-nav__link">
+    <span class="md-ellipsis">
+      CensusData
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CensusData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.fetch_geography_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      fetch_geography_data()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_acs_data()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#homestock.homestock.Map" class="md-nav__link">
     <span class="md-ellipsis">
       Map
@@ -808,6 +841,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData" class="md-nav__link">
+    <span class="md-ellipsis">
+      CensusData
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CensusData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.fetch_geography_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      fetch_geography_data()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homestock.homestock.CensusData.get_acs_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_acs_data()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#homestock.homestock.Map" class="md-nav__link">
     <span class="md-ellipsis">
       Map
@@ -969,6 +1035,644 @@
 
 
 
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="homestock.homestock.CensusData" class="doc doc-heading">
+        <code>
+CensusData        </code>
+
+
+
+<a href="#homestock.homestock.CensusData" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+
+        <details class="quote">
+          <summary>Source code in <code>homestock/homestock.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CensusData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_file</span><span class="o">=</span><span class="s2">&quot;acs_tables.csv&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table_file</span> <span class="o">=</span> <span class="n">table_file</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prompts user for inputs, fetches ACS data at various geographic levels,</span>
+<span class="sd">        supports multiple years, and offers CSV export option.</span>
+<span class="sd">        Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Welcome to the ACS Data Fetcher!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get API key</span>
+        <span class="n">api_key</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter your Census API key: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;API key is required.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get table ID</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the ACS table ID (e.g., B19001): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">table</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Table ID is required.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get year(s) - support for multiple years</span>
+        <span class="n">year_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter ACS year(s) (comma-separated for multiple, e.g., 2018,2019,2020): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">year_input</span><span class="p">:</span>
+            <span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2020</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">year_input</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Years must be comma-separated integers (e.g., &#39;2018,2019,2020&#39;)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get survey type</span>
+        <span class="n">survey_type</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter survey type (&#39;5&#39; for ACS 5-year, &#39;1&#39; for ACS 1-year): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">survey_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">}:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Survey type must be &#39;1&#39; or &#39;5&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">acs_survey</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs</span><span class="si">{</span><span class="n">survey_type</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Get geography level</span>
+        <span class="n">valid_geographies</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;acs5&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;Nation&quot;</span><span class="p">,</span> <span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;County&quot;</span><span class="p">,</span> <span class="s2">&quot;County Subdivision&quot;</span><span class="p">,</span> <span class="s2">&quot;Place&quot;</span><span class="p">,</span> <span class="s2">&quot;ZIP Code Tabulation Area&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Metropolitan/Micropolitan Statistical Area&quot;</span><span class="p">,</span> <span class="s2">&quot;Census Tract&quot;</span><span class="p">,</span> <span class="s2">&quot;Block&quot;</span><span class="p">,</span> <span class="s2">&quot;Block Group&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;acs1&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;Nation&quot;</span><span class="p">,</span> <span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;County&quot;</span><span class="p">,</span> <span class="s2">&quot;Metropolitan/Micropolitan Statistical Area&quot;</span><span class="p">,</span> <span class="s2">&quot;Place&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Available geographic levels for </span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">geo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">valid_geographies</span><span class="p">[</span><span class="n">acs_survey</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">geo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">geo_selection</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the number corresponding to your desired geographic level: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">geo_selection</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">geo_selection</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_geographies</span><span class="p">[</span><span class="n">acs_survey</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid selection. Please enter a number from the list.&quot;</span><span class="p">)</span>
+
+        <span class="n">geography</span> <span class="o">=</span> <span class="n">valid_geographies</span><span class="p">[</span><span class="n">acs_survey</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">geo_selection</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You selected: </span><span class="si">{</span><span class="n">geography</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get state input if needed</span>
+        <span class="n">state_fips</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">state_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">geography</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;County&quot;</span><span class="p">,</span> <span class="s2">&quot;County Subdivision&quot;</span><span class="p">,</span> <span class="s2">&quot;Place&quot;</span><span class="p">,</span> <span class="s2">&quot;ZIP Code Tabulation Area&quot;</span><span class="p">,</span> 
+                        <span class="s2">&quot;Census Tract&quot;</span><span class="p">,</span> <span class="s2">&quot;Block&quot;</span><span class="p">,</span> <span class="s2">&quot;Block Group&quot;</span><span class="p">]:</span>
+            <span class="n">state_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the full state name (e.g., Tennessee): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">state_obj</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">state_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">state_obj</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid state name: </span><span class="si">{</span><span class="n">state_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">state_fips</span> <span class="o">=</span> <span class="n">state_obj</span><span class="o">.</span><span class="n">fips</span>
+
+        <span class="c1"># Get additional geography-specific inputs</span>
+        <span class="n">geo_params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;County&quot;</span><span class="p">:</span>
+            <span class="n">county_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the county name (e.g., Knox) or * for all counties: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;county_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">county_name</span>
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Place&quot;</span><span class="p">:</span>
+            <span class="n">place_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Place ID or * for all places in the state: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;place_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">place_id</span>
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Metropolitan/Micropolitan Statistical Area&quot;</span><span class="p">:</span>
+            <span class="n">metro_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Metro/Micro area ID: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;metro_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metro_id</span>
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;ZIP Code Tabulation Area&quot;</span><span class="p">:</span>
+            <span class="n">zip_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the ZIP Code Tabulation Area ID or * for all: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;zip_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zip_id</span>
+        <span class="k">elif</span> <span class="n">geography</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Census Tract&quot;</span><span class="p">,</span> <span class="s2">&quot;Block Group&quot;</span><span class="p">,</span> <span class="s2">&quot;Block&quot;</span><span class="p">]:</span>
+            <span class="n">county_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the county name (e.g., Knox) or * for all counties: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;county_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">county_name</span>
+            <span class="k">if</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Census Tract&quot;</span><span class="p">:</span>
+                <span class="n">tract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Census Tract number or * for all tracts in this county: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;tract_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tract_id</span>
+            <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Block Group&quot;</span><span class="p">:</span>
+                <span class="n">tract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Census Tract number: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">block_group_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Block Group number or * for all: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;tract_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tract_id</span>
+                <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;block_group_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_group_id</span>
+            <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Block&quot;</span><span class="p">:</span>
+                <span class="n">tract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Census Tract number: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">block_group_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Block Group number: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">block_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Block number or * for all: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;tract_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tract_id</span>
+                <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;block_group_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_group_id</span>
+                <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;block_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_id</span>
+
+        <span class="c1"># Ask about CSV export</span>
+        <span class="n">export_csv</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Would you like to export the data to CSV? (y/n): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">export_csv</span><span class="p">:</span>
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter output directory path (leave blank for current directory): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">output_dir</span><span class="p">:</span>
+                <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+        <span class="c1"># Initialize Census client</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Census</span><span class="p">(</span><span class="n">api_key</span><span class="p">)</span>
+
+        <span class="c1"># Dictionary to hold DataFrames for each year</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Processing year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Get metadata and variable labels</span>
+                <span class="n">metadata_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://api.census.gov/data/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">/acs/</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">/variables.json&quot;</span>
+                <span class="n">metadata_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metadata_url</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">metadata_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Failed to get table metadata for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">metadata_response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="n">variables</span> <span class="o">=</span> <span class="n">metadata_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;variables&#39;</span><span class="p">]</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">var</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">)]</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: No variables found for table </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> in year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Build a label mapping for renaming columns later</span>
+                <span class="n">field_label_map</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">var</span><span class="p">:</span> <span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Estimate!!&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Estimate: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">fields</span>
+                <span class="p">}</span>
+
+                <span class="c1"># Fetch data based on geography</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_geography_data</span><span class="p">(</span>
+                    <span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: No data retrieved for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully retrieved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> records for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Convert to DataFrame</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+                <span class="c1"># Rename ACS variable columns to descriptive labels</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">field_label_map</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># Sort columns: data fields first, geographic identifiers last</span>
+                <span class="n">geo_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">geo</span> <span class="ow">in</span> <span class="n">col</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> 
+                            <span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;county&#39;</span><span class="p">,</span> <span class="s1">&#39;tract&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="s1">&#39;place&#39;</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span><span class="p">,</span> <span class="s1">&#39;msa&#39;</span><span class="p">])]</span>
+                <span class="n">data_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">geo_cols</span><span class="p">])</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">data_cols</span> <span class="o">+</span> <span class="n">geo_cols</span><span class="p">]</span>
+
+                <span class="c1"># Add year column</span>
+                <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+
+                <span class="c1"># Store DataFrame</span>
+                <span class="n">dfs</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+                <span class="c1"># Export to CSV if requested</span>
+                <span class="k">if</span> <span class="n">export_csv</span><span class="p">:</span>
+                    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs_</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">geography</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+                    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Return appropriate result based on number of years requested</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">years</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">dfs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">dfs</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_geography_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
+                            <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetches data for specific geography and returns a pandas DataFrame.</span>
+<span class="sd">        Optionally saves the data to a CSV file.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        c : Census</span>
+<span class="sd">            Census API client</span>
+<span class="sd">        acs_survey : str</span>
+<span class="sd">            &#39;acs1&#39; or &#39;acs5&#39;</span>
+<span class="sd">        geography : str</span>
+<span class="sd">            Geographic level (e.g., &#39;State&#39;, &#39;County&#39;)</span>
+<span class="sd">        year : int</span>
+<span class="sd">            Year of data</span>
+<span class="sd">        fields : list</span>
+<span class="sd">            List of variable names to fetch</span>
+<span class="sd">        state_fips : str</span>
+<span class="sd">            State FIPS code (if needed for geography)</span>
+<span class="sd">        geo_params : dict</span>
+<span class="sd">            Additional geography-specific parameters</span>
+<span class="sd">        save_csv : bool, optional</span>
+<span class="sd">            Whether to save the data to CSV (default False)</span>
+<span class="sd">        output_dir : str, optional</span>
+<span class="sd">            Directory to save CSV (defaults to current directory)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            DataFrame containing the fetched data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Fetch the raw data</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_data</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data returned for </span><span class="si">{</span><span class="n">geography</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+        <span class="c1"># Convert to DataFrame</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+        <span class="c1"># Add metadata columns</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;survey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acs_survey</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;geography&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geography</span>
+
+        <span class="c1"># Save to CSV if requested</span>
+        <span class="k">if</span> <span class="n">save_csv</span><span class="p">:</span>
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Create descriptive filename</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">geography</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data saved to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper function that contains the original fetching logic&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Nation&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetching data for the Nation...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">)</span><span class="o">.</span><span class="n">us</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;State&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetching data at State level...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">)</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;County&quot;</span><span class="p">:</span>
+            <span class="n">county_name</span> <span class="o">=</span> <span class="n">geo_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;county_name&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">county_name</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetching data for all counties...&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">)</span><span class="o">.</span><span class="n">state_county</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">counties_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;https://api.census.gov/data/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">/acs/</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s1">?get=NAME&amp;for=county:*&amp;in=state:</span><span class="si">{</span><span class="n">state_fips</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">counties_url</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch counties: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">counties_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">county_fips</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">counties_data</span> <span class="k">if</span> <span class="n">county_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()),</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">county_fips</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;County &#39;</span><span class="si">{</span><span class="n">county_name</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fetching data for </span><span class="si">{</span><span class="n">county_name</span><span class="si">}</span><span class="s2"> County...&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">)</span><span class="o">.</span><span class="n">state_county</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">county_fips</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+
+        <span class="c1"># ... [rest of the original geography handling code] ...</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="homestock.homestock.CensusData.fetch_geography_data" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fetch_geography_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#homestock.homestock.CensusData.fetch_geography_data" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Fetches data for specific geography and returns a pandas DataFrame.
+Optionally saves the data to a CSV file.</p>
+      <p>c : Census
+    Census API client
+acs_survey : str
+    'acs1' or 'acs5'
+geography : str
+    Geographic level (e.g., 'State', 'County')
+year : int
+    Year of data
+fields : list
+    List of variable names to fetch
+state_fips : str
+    State FIPS code (if needed for geography)
+geo_params : dict
+    Additional geography-specific parameters
+save_csv : bool, optional
+    Whether to save the data to CSV (default False)
+output_dir : str, optional
+    Directory to save CSV (defaults to current directory)</p>
+      <p>pd.DataFrame
+    DataFrame containing the fetched data</p>
+
+        <details class="quote">
+          <summary>Source code in <code>homestock/homestock.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fetch_geography_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
+                        <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches data for specific geography and returns a pandas DataFrame.</span>
+<span class="sd">    Optionally saves the data to a CSV file.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    c : Census</span>
+<span class="sd">        Census API client</span>
+<span class="sd">    acs_survey : str</span>
+<span class="sd">        &#39;acs1&#39; or &#39;acs5&#39;</span>
+<span class="sd">    geography : str</span>
+<span class="sd">        Geographic level (e.g., &#39;State&#39;, &#39;County&#39;)</span>
+<span class="sd">    year : int</span>
+<span class="sd">        Year of data</span>
+<span class="sd">    fields : list</span>
+<span class="sd">        List of variable names to fetch</span>
+<span class="sd">    state_fips : str</span>
+<span class="sd">        State FIPS code (if needed for geography)</span>
+<span class="sd">    geo_params : dict</span>
+<span class="sd">        Additional geography-specific parameters</span>
+<span class="sd">    save_csv : bool, optional</span>
+<span class="sd">        Whether to save the data to CSV (default False)</span>
+<span class="sd">    output_dir : str, optional</span>
+<span class="sd">        Directory to save CSV (defaults to current directory)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        DataFrame containing the fetched data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Fetch the raw data</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data returned for </span><span class="si">{</span><span class="n">geography</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="c1"># Convert to DataFrame</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+    <span class="c1"># Add metadata columns</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;survey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acs_survey</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;geography&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geography</span>
+
+    <span class="c1"># Save to CSV if requested</span>
+    <span class="k">if</span> <span class="n">save_csv</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Create descriptive filename</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">geography</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data saved to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="homestock.homestock.CensusData.get_acs_data" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_acs_data</span><span class="p">()</span></code>
+
+
+<a href="#homestock.homestock.CensusData.get_acs_data" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Prompts user for inputs, fetches ACS data at various geographic levels,
+supports multiple years, and offers CSV export option.
+Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>homestock/homestock.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prompts user for inputs, fetches ACS data at various geographic levels,</span>
+<span class="sd">    supports multiple years, and offers CSV export option.</span>
+<span class="sd">    Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Welcome to the ACS Data Fetcher!&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get API key</span>
+    <span class="n">api_key</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter your Census API key: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;API key is required.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get table ID</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the ACS table ID (e.g., B19001): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">table</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Table ID is required.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get year(s) - support for multiple years</span>
+    <span class="n">year_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter ACS year(s) (comma-separated for multiple, e.g., 2018,2019,2020): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">year_input</span><span class="p">:</span>
+        <span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2020</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">year_input</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Years must be comma-separated integers (e.g., &#39;2018,2019,2020&#39;)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get survey type</span>
+    <span class="n">survey_type</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter survey type (&#39;5&#39; for ACS 5-year, &#39;1&#39; for ACS 1-year): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">survey_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">}:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Survey type must be &#39;1&#39; or &#39;5&#39;.&quot;</span><span class="p">)</span>
+    <span class="n">acs_survey</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs</span><span class="si">{</span><span class="n">survey_type</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Get geography level</span>
+    <span class="n">valid_geographies</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;acs5&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;Nation&quot;</span><span class="p">,</span> <span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;County&quot;</span><span class="p">,</span> <span class="s2">&quot;County Subdivision&quot;</span><span class="p">,</span> <span class="s2">&quot;Place&quot;</span><span class="p">,</span> <span class="s2">&quot;ZIP Code Tabulation Area&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Metropolitan/Micropolitan Statistical Area&quot;</span><span class="p">,</span> <span class="s2">&quot;Census Tract&quot;</span><span class="p">,</span> <span class="s2">&quot;Block&quot;</span><span class="p">,</span> <span class="s2">&quot;Block Group&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;acs1&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;Nation&quot;</span><span class="p">,</span> <span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;County&quot;</span><span class="p">,</span> <span class="s2">&quot;Metropolitan/Micropolitan Statistical Area&quot;</span><span class="p">,</span> <span class="s2">&quot;Place&quot;</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Available geographic levels for </span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">geo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">valid_geographies</span><span class="p">[</span><span class="n">acs_survey</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">geo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">geo_selection</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the number corresponding to your desired geographic level: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">geo_selection</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">geo_selection</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_geographies</span><span class="p">[</span><span class="n">acs_survey</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid selection. Please enter a number from the list.&quot;</span><span class="p">)</span>
+
+    <span class="n">geography</span> <span class="o">=</span> <span class="n">valid_geographies</span><span class="p">[</span><span class="n">acs_survey</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">geo_selection</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You selected: </span><span class="si">{</span><span class="n">geography</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get state input if needed</span>
+    <span class="n">state_fips</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">state_name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">geography</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;County&quot;</span><span class="p">,</span> <span class="s2">&quot;County Subdivision&quot;</span><span class="p">,</span> <span class="s2">&quot;Place&quot;</span><span class="p">,</span> <span class="s2">&quot;ZIP Code Tabulation Area&quot;</span><span class="p">,</span> 
+                    <span class="s2">&quot;Census Tract&quot;</span><span class="p">,</span> <span class="s2">&quot;Block&quot;</span><span class="p">,</span> <span class="s2">&quot;Block Group&quot;</span><span class="p">]:</span>
+        <span class="n">state_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the full state name (e.g., Tennessee): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">state_obj</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">state_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">state_obj</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid state name: </span><span class="si">{</span><span class="n">state_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">state_fips</span> <span class="o">=</span> <span class="n">state_obj</span><span class="o">.</span><span class="n">fips</span>
+
+    <span class="c1"># Get additional geography-specific inputs</span>
+    <span class="n">geo_params</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;County&quot;</span><span class="p">:</span>
+        <span class="n">county_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the county name (e.g., Knox) or * for all counties: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;county_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">county_name</span>
+    <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Place&quot;</span><span class="p">:</span>
+        <span class="n">place_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Place ID or * for all places in the state: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;place_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">place_id</span>
+    <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Metropolitan/Micropolitan Statistical Area&quot;</span><span class="p">:</span>
+        <span class="n">metro_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Metro/Micro area ID: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;metro_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metro_id</span>
+    <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;ZIP Code Tabulation Area&quot;</span><span class="p">:</span>
+        <span class="n">zip_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the ZIP Code Tabulation Area ID or * for all: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;zip_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zip_id</span>
+    <span class="k">elif</span> <span class="n">geography</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Census Tract&quot;</span><span class="p">,</span> <span class="s2">&quot;Block Group&quot;</span><span class="p">,</span> <span class="s2">&quot;Block&quot;</span><span class="p">]:</span>
+        <span class="n">county_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the county name (e.g., Knox) or * for all counties: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;county_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">county_name</span>
+        <span class="k">if</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Census Tract&quot;</span><span class="p">:</span>
+            <span class="n">tract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Census Tract number or * for all tracts in this county: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;tract_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tract_id</span>
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Block Group&quot;</span><span class="p">:</span>
+            <span class="n">tract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Census Tract number: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">block_group_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Block Group number or * for all: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;tract_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tract_id</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;block_group_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_group_id</span>
+        <span class="k">elif</span> <span class="n">geography</span> <span class="o">==</span> <span class="s2">&quot;Block&quot;</span><span class="p">:</span>
+            <span class="n">tract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Census Tract number: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">block_group_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Block Group number: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">block_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the Block number or * for all: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;tract_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tract_id</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;block_group_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_group_id</span>
+            <span class="n">geo_params</span><span class="p">[</span><span class="s1">&#39;block_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_id</span>
+
+    <span class="c1"># Ask about CSV export</span>
+    <span class="n">export_csv</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Would you like to export the data to CSV? (y/n): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">export_csv</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter output directory path (leave blank for current directory): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">output_dir</span><span class="p">:</span>
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="c1"># Initialize Census client</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Census</span><span class="p">(</span><span class="n">api_key</span><span class="p">)</span>
+
+    <span class="c1"># Dictionary to hold DataFrames for each year</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Processing year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Get metadata and variable labels</span>
+            <span class="n">metadata_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://api.census.gov/data/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">/acs/</span><span class="si">{</span><span class="n">acs_survey</span><span class="si">}</span><span class="s2">/variables.json&quot;</span>
+            <span class="n">metadata_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metadata_url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">metadata_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Failed to get table metadata for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">metadata_response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">variables</span> <span class="o">=</span> <span class="n">metadata_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;variables&#39;</span><span class="p">]</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">var</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: No variables found for table </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> in year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Build a label mapping for renaming columns later</span>
+            <span class="n">field_label_map</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">var</span><span class="p">:</span> <span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Estimate!!&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Estimate: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">fields</span>
+            <span class="p">}</span>
+
+            <span class="c1"># Fetch data based on geography</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_geography_data</span><span class="p">(</span>
+                <span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: No data retrieved for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully retrieved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> records for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Convert to DataFrame</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="c1"># Rename ACS variable columns to descriptive labels</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">field_label_map</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Sort columns: data fields first, geographic identifiers last</span>
+            <span class="n">geo_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">geo</span> <span class="ow">in</span> <span class="n">col</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> 
+                        <span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;county&#39;</span><span class="p">,</span> <span class="s1">&#39;tract&#39;</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="s1">&#39;place&#39;</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span><span class="p">,</span> <span class="s1">&#39;msa&#39;</span><span class="p">])]</span>
+            <span class="n">data_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">geo_cols</span><span class="p">])</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">data_cols</span> <span class="o">+</span> <span class="n">geo_cols</span><span class="p">]</span>
+
+            <span class="c1"># Add year column</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+
+            <span class="c1"># Store DataFrame</span>
+            <span class="n">dfs</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+            <span class="c1"># Export to CSV if requested</span>
+            <span class="k">if</span> <span class="n">export_csv</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;acs_</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">geography</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+                <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data for year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> saved to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Return appropriate result based on number of years requested</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">years</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dfs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">dfs</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
 
 
 
