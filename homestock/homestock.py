@@ -317,18 +317,13 @@ class CensusData:
     def search_census_tables():
         """
         Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, 
-        Table Title, and Year in a formatted table.
+        Table Title, and Year availability in a formatted table.
     
-        Parameters:
-            | Parameter | Type | Description |
-            |-----------|------|-------------|
-            | `keyword` | `str` | Search term to match against table titles |
-            | `year` | `int`, optional | Filter results by specific year (default: None) |
+        Args:
+            keyword (str): keyword from ACS table title
         
         Returns:
-            | Type | Description |
-            |------|-------------|
-            | `pd.DataFrame` | Formatted table of matching results |
+            pd.DataFrame: Formatted table of matching results generated from the keyword.
         
         **Source code in:** `homestock/homestock.py`
         """
@@ -352,16 +347,14 @@ class CensusData:
             print(f"\nNo matching Census Tables found for '{keyword}'. Try another term!")
     
     def get_acs_data():
-        """
-        Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, 
+         """
+        Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years,
         and offers CSV export option.
-
+    
         Returns:
-            | Type | Description |
-            |------|-------------|
-            | `pd.DataFrame` | If one year requested |
-            | `dict` | Dictionary of `{year: pd.DataFrame}` if multiple years requested |
-
+            pd.DataFrame: If one year requested
+            dict: Dictionary of {year: pd.DataFrame} if multiple years requested
+    
         Note: This interactive function prompts for:
             - API Key (required)
             - Table ID (e.g., "B19001")
@@ -370,7 +363,8 @@ class CensusData:
             - Geography level
             - State/county details (when applicable)
             - CSV export options
-        **Source code in:** `homestock/homestock.py`
+    
+        Source code in: homestock/homestock.py
         """
         print("Welcome to the ACS Data Fetcher!")
 
@@ -556,25 +550,22 @@ class CensusData:
         """
         Fetches data for specific geography and returns a pandas DataFrame.
         Optionally saves the data to a CSV file.
-
-        Parameters:
-            | Parameter | Type | Description |
-            |-----------|------|-------------|
-            | `c` | `Census` | Census API client |
-            | `acs_survey` | `str` | 'acs1' or 'acs5' |
-            | `geography` | `str` | Geographic level (e.g., 'State', 'County') |
-            | `year` | `int` | Year of data |
-            | `fields` | `list` | List of variable names to fetch |
-            | `state_fips` | `str` | State FIPS code (if needed for geography) |
-            | `geo_params` | `dict` | Additional geography-specific parameters |
-            | `save_csv` | `bool` | Whether to save to CSV (default: False) |
-            | `output_dir` | `str` | Directory for CSV export (default: current directory) |
-
+    
+        Args:
+            c (Census): Census API client
+            acs_survey (str): 'acs1' or 'acs5'
+            geography (str): Geographic level (e.g., 'State', 'County')
+            year (int): Year of data
+            fields (list): List of variable names to fetch
+            state_fips (str): State FIPS code (if needed for geography)
+            geo_params (dict): Additional geography-specific parameters
+            save_csv (bool, optional): Whether to save to CSV. Defaults to False.
+            output_dir (str, optional): Directory for CSV export. Defaults to current directory.
+    
         Returns:
-            | Type | Description |
-            |------|-------------|
-            | `pd.DataFrame` | DataFrame containing the fetched data |
-        **Source code in:** `homestock/homestock.py`
+            pd.DataFrame: DataFrame containing the fetched data
+    
+        Source code in: homestock/homestock.py
         """
         # Fetch the raw data
         raw_data = _fetch_raw_data(c, acs_survey, geography, year, fields, state_fips, geo_params)
