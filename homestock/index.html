@@ -1032,22 +1032,13 @@ CensusData        </code>
         <span class="bp">self</span><span class="o">.</span><span class="n">table_file</span> <span class="o">=</span> <span class="n">table_file</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">():</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, </span>
-<span class="sd">        Table Title, and Year in a formatted table.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search the Census tables based on a keyword.</span>
 
-<span class="sd">        Parameters:</span>
-<span class="sd">            | Parameter | Type | Description |</span>
-<span class="sd">            |-----------|------|-------------|</span>
-<span class="sd">            | `keyword` | `str` | Search term to match against table titles |</span>
-<span class="sd">            | `year` | `int`, optional | Filter results by specific year (default: None) |</span>
+<span class="sd">        Args:</span>
+<span class="sd">            keyword (str): Keyword from ACS table title.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            | Type | Description |</span>
-<span class="sd">            |------|-------------|</span>
-<span class="sd">            | `pd.DataFrame` | Formatted table of matching results |</span>
-
-<span class="sd">        **Source code in:** `homestock/homestock.py`</span>
+<span class="sd">            pd.DataFrame: Formatted table of matching results generated from the keyword.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Prompt user for keyword input</span>
         <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -1069,15 +1060,14 @@ CensusData        </code>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">No matching Census Tables found for &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;. Try another term!&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data</span><span class="p">():</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, </span>
-<span class="sd">        and offers CSV export option.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch ACS data at various geographic levels with interactive prompts.</span>
+
+<span class="sd">        Prompts user for inputs, fetches ACS data at various geographic levels, </span>
+<span class="sd">        supports multiple years, and offers CSV export option.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            | Type | Description |</span>
-<span class="sd">            |------|-------------|</span>
-<span class="sd">            | `pd.DataFrame` | If one year requested |</span>
-<span class="sd">            | `dict` | Dictionary of `{year: pd.DataFrame}` if multiple years requested |</span>
+<span class="sd">            pd.DataFrame: If one year requested</span>
+<span class="sd">            dict: Dictionary of {year: pd.DataFrame} if multiple years requested</span>
 
 <span class="sd">        Note: This interactive function prompts for:</span>
 <span class="sd">            - API Key (required)</span>
@@ -1087,7 +1077,6 @@ CensusData        </code>
 <span class="sd">            - Geography level</span>
 <span class="sd">            - State/county details (when applicable)</span>
 <span class="sd">            - CSV export options</span>
-<span class="sd">        **Source code in:** `homestock/homestock.py`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Welcome to the ACS Data Fetcher!&quot;</span><span class="p">)</span>
 
@@ -1270,28 +1259,21 @@ CensusData        </code>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data_manually</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
                             <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Fetches data for specific geography and returns a pandas DataFrame.</span>
-<span class="sd">        Optionally saves the data to a CSV file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch data for specific geography and return a pandas DataFrame.</span>
 
-<span class="sd">        Parameters:</span>
-<span class="sd">            | Parameter | Type | Description |</span>
-<span class="sd">            |-----------|------|-------------|</span>
-<span class="sd">            | `c` | `Census` | Census API client |</span>
-<span class="sd">            | `acs_survey` | `str` | &#39;acs1&#39; or &#39;acs5&#39; |</span>
-<span class="sd">            | `geography` | `str` | Geographic level (e.g., &#39;State&#39;, &#39;County&#39;) |</span>
-<span class="sd">            | `year` | `int` | Year of data |</span>
-<span class="sd">            | `fields` | `list` | List of variable names to fetch |</span>
-<span class="sd">            | `state_fips` | `str` | State FIPS code (if needed for geography) |</span>
-<span class="sd">            | `geo_params` | `dict` | Additional geography-specific parameters |</span>
-<span class="sd">            | `save_csv` | `bool` | Whether to save to CSV (default: False) |</span>
-<span class="sd">            | `output_dir` | `str` | Directory for CSV export (default: current directory) |</span>
+<span class="sd">        Args:</span>
+<span class="sd">            c (Census): Census API client</span>
+<span class="sd">            acs_survey (str): &#39;acs1&#39; or &#39;acs5&#39;</span>
+<span class="sd">            geography (str): Geographic level (e.g., &#39;State&#39;, &#39;County&#39;)</span>
+<span class="sd">            year (int): Year of data</span>
+<span class="sd">            fields (list): List of variable names to fetch</span>
+<span class="sd">            state_fips (str): State FIPS code (if needed for geography)</span>
+<span class="sd">            geo_params (dict): Additional geography-specific parameters</span>
+<span class="sd">            save_csv (bool, optional): Whether to save to CSV. Defaults to False.</span>
+<span class="sd">            output_dir (str, optional): Directory for CSV export. Defaults to current directory.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            | Type | Description |</span>
-<span class="sd">            |------|-------------|</span>
-<span class="sd">            | `pd.DataFrame` | DataFrame containing the fetched data |</span>
-<span class="sd">        **Source code in:** `homestock/homestock.py`</span>
+<span class="sd">            pd.DataFrame: DataFrame containing the fetched data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Fetch the raw data</span>
         <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">)</span>
@@ -1380,8 +1362,9 @@ CensusData        </code>
 
     <div class="doc doc-contents ">
 
-      <p>Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, 
-and offers CSV export option.</p>
+      <p>Fetch ACS data at various geographic levels with interactive prompts.</p>
+<p>Prompts user for inputs, fetches ACS data at various geographic levels, 
+supports multiple years, and offers CSV export option.</p>
 
 <p><strong>Returns:</strong></p>
 <table>
@@ -1393,11 +1376,9 @@ and offers CSV export option.</p>
   </thead>
   <tbody>
     <tr>
-      <td><code>| Type | Description |
-|------|-------------|
-| `pd.DataFrame` | If one year requested |
-| `dict` | Dictionary of `{year</code></td>
-      <td><p>pd.DataFrame}` if multiple years requested |</p></td>
+      <td><code>pd.DataFrame</code></td>
+      <td><p>If one year requested
+dict: Dictionary of {year: pd.DataFrame} if multiple years requested</p></td>
     </tr>
   </tbody>
 </table>      <div class="admonition note">
@@ -1412,20 +1393,18 @@ and offers CSV export option.</p>
 <li>CSV export options</li>
 </ul>
 </div>
-<p><strong>Source code in:</strong> <code>homestock/homestock.py</code></p>
 
         <details class="quote">
           <summary>Source code in <code>homestock/homestock.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, </span>
-<span class="sd">    and offers CSV export option.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch ACS data at various geographic levels with interactive prompts.</span>
+
+<span class="sd">    Prompts user for inputs, fetches ACS data at various geographic levels, </span>
+<span class="sd">    supports multiple years, and offers CSV export option.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        | Type | Description |</span>
-<span class="sd">        |------|-------------|</span>
-<span class="sd">        | `pd.DataFrame` | If one year requested |</span>
-<span class="sd">        | `dict` | Dictionary of `{year: pd.DataFrame}` if multiple years requested |</span>
+<span class="sd">        pd.DataFrame: If one year requested</span>
+<span class="sd">        dict: Dictionary of {year: pd.DataFrame} if multiple years requested</span>
 
 <span class="sd">    Note: This interactive function prompts for:</span>
 <span class="sd">        - API Key (required)</span>
@@ -1435,7 +1414,6 @@ and offers CSV export option.</p>
 <span class="sd">        - Geography level</span>
 <span class="sd">        - State/county details (when applicable)</span>
 <span class="sd">        - CSV export options</span>
-<span class="sd">    **Source code in:** `homestock/homestock.py`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Welcome to the ACS Data Fetcher!&quot;</span><span class="p">)</span>
 
@@ -1635,8 +1613,7 @@ and offers CSV export option.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Fetches data for specific geography and returns a pandas DataFrame.
-Optionally saves the data to a CSV file.</p>
+      <p>Fetch data for specific geography and return a pandas DataFrame.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -1650,16 +1627,58 @@ Optionally saves the data to a CSV file.</p>
   </thead>
   <tbody>
       <tr>
-        <td><code>|</code></td>
-        <td><code>`save_csv` | `bool` | Whether to save to CSV (default</code></td>
-        <td><p>False) |</p></td>
+        <td><code>c</code></td>
+        <td><code>Census</code></td>
+        <td><p>Census API client</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
-        <td><code>|</code></td>
-        <td><code>`output_dir` | `str` | Directory for CSV export (default</code></td>
-        <td><p>current directory) |</p></td>
+        <td><code>acs_survey</code></td>
+        <td><code>str</code></td>
+        <td><p>'acs1' or 'acs5'</p></td>
         <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>geography</code></td>
+        <td><code>str</code></td>
+        <td><p>Geographic level (e.g., 'State', 'County')</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>year</code></td>
+        <td><code>int</code></td>
+        <td><p>Year of data</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>fields</code></td>
+        <td><code>list</code></td>
+        <td><p>List of variable names to fetch</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>state_fips</code></td>
+        <td><code>str</code></td>
+        <td><p>State FIPS code (if needed for geography)</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>geo_params</code></td>
+        <td><code>dict</code></td>
+        <td><p>Additional geography-specific parameters</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>save_csv</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to save to CSV. Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>output_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>Directory for CSV export. Defaults to current directory.</p></td>
+        <td><code>None</code></td>
       </tr>
   </tbody>
 </table>
@@ -1673,51 +1692,30 @@ Optionally saves the data to a CSV file.</p>
   </thead>
   <tbody>
     <tr>
-      <td></td>
-      <td><table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pd.DataFrame</code></td>
-<td>DataFrame containing the fetched data</td>
-</tr>
-</tbody>
-</table></td>
+      <td><code>pd.DataFrame</code></td>
+      <td><p>DataFrame containing the fetched data</p></td>
     </tr>
   </tbody>
-</table>      <p><strong>Source code in:</strong> <code>homestock/homestock.py</code></p>
-
+</table>
         <details class="quote">
           <summary>Source code in <code>homestock/homestock.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_acs_data_manually</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">,</span> 
                         <span class="n">save_csv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fetches data for specific geography and returns a pandas DataFrame.</span>
-<span class="sd">    Optionally saves the data to a CSV file.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch data for specific geography and return a pandas DataFrame.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">        | Parameter | Type | Description |</span>
-<span class="sd">        |-----------|------|-------------|</span>
-<span class="sd">        | `c` | `Census` | Census API client |</span>
-<span class="sd">        | `acs_survey` | `str` | &#39;acs1&#39; or &#39;acs5&#39; |</span>
-<span class="sd">        | `geography` | `str` | Geographic level (e.g., &#39;State&#39;, &#39;County&#39;) |</span>
-<span class="sd">        | `year` | `int` | Year of data |</span>
-<span class="sd">        | `fields` | `list` | List of variable names to fetch |</span>
-<span class="sd">        | `state_fips` | `str` | State FIPS code (if needed for geography) |</span>
-<span class="sd">        | `geo_params` | `dict` | Additional geography-specific parameters |</span>
-<span class="sd">        | `save_csv` | `bool` | Whether to save to CSV (default: False) |</span>
-<span class="sd">        | `output_dir` | `str` | Directory for CSV export (default: current directory) |</span>
+<span class="sd">    Args:</span>
+<span class="sd">        c (Census): Census API client</span>
+<span class="sd">        acs_survey (str): &#39;acs1&#39; or &#39;acs5&#39;</span>
+<span class="sd">        geography (str): Geographic level (e.g., &#39;State&#39;, &#39;County&#39;)</span>
+<span class="sd">        year (int): Year of data</span>
+<span class="sd">        fields (list): List of variable names to fetch</span>
+<span class="sd">        state_fips (str): State FIPS code (if needed for geography)</span>
+<span class="sd">        geo_params (dict): Additional geography-specific parameters</span>
+<span class="sd">        save_csv (bool, optional): Whether to save to CSV. Defaults to False.</span>
+<span class="sd">        output_dir (str, optional): Directory for CSV export. Defaults to current directory.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        | Type | Description |</span>
-<span class="sd">        |------|-------------|</span>
-<span class="sd">        | `pd.DataFrame` | DataFrame containing the fetched data |</span>
-<span class="sd">    **Source code in:** `homestock/homestock.py`</span>
+<span class="sd">        pd.DataFrame: DataFrame containing the fetched data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Fetch the raw data</span>
     <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_fetch_raw_data</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">acs_survey</span><span class="p">,</span> <span class="n">geography</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">state_fips</span><span class="p">,</span> <span class="n">geo_params</span><span class="p">)</span>
@@ -1767,8 +1765,7 @@ Optionally saves the data to a CSV file.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Searches the Census tables in <code>acs_tables.csv</code> based on a keyword. Returns matching Table ID, 
-Table Title, and Year in a formatted table.</p>
+      <p>Search the Census tables based on a keyword.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -1782,9 +1779,9 @@ Table Title, and Year in a formatted table.</p>
   </thead>
   <tbody>
       <tr>
-        <td><code>|</code></td>
-        <td><code>`year` | `int`, optional | Filter results by specific year (default</code></td>
-        <td><p>None) |</p></td>
+        <td><code>keyword</code></td>
+        <td><code>str</code></td>
+        <td><p>Keyword from ACS table title.</p></td>
         <td><em>required</em></td>
       </tr>
   </tbody>
@@ -1799,44 +1796,21 @@ Table Title, and Year in a formatted table.</p>
   </thead>
   <tbody>
     <tr>
-      <td></td>
-      <td><table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pd.DataFrame</code></td>
-<td>Formatted table of matching results</td>
-</tr>
-</tbody>
-</table></td>
+      <td><code>pd.DataFrame</code></td>
+      <td><p>Formatted table of matching results generated from the keyword.</p></td>
     </tr>
   </tbody>
-</table>      <p><strong>Source code in:</strong> <code>homestock/homestock.py</code></p>
-
+</table>
         <details class="quote">
           <summary>Source code in <code>homestock/homestock.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">search_census_tables</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, </span>
-<span class="sd">    Table Title, and Year in a formatted table.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search the Census tables based on a keyword.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">        | Parameter | Type | Description |</span>
-<span class="sd">        |-----------|------|-------------|</span>
-<span class="sd">        | `keyword` | `str` | Search term to match against table titles |</span>
-<span class="sd">        | `year` | `int`, optional | Filter results by specific year (default: None) |</span>
+<span class="sd">    Args:</span>
+<span class="sd">        keyword (str): Keyword from ACS table title.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        | Type | Description |</span>
-<span class="sd">        |------|-------------|</span>
-<span class="sd">        | `pd.DataFrame` | Formatted table of matching results |</span>
-
-<span class="sd">    **Source code in:** `homestock/homestock.py`</span>
+<span class="sd">        pd.DataFrame: Formatted table of matching results generated from the keyword.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Prompt user for keyword input</span>
     <span class="n">keyword</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter a keyword to search Census tables: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
