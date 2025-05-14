@@ -315,17 +315,13 @@ class CensusData:
         self.table_file = table_file
 
     def search_census_tables():
-        """
-        Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, 
-        Table Title, and Year availability in a formatted table.
-    
-        Args:
-            keyword (str): keyword from ACS table title
+        """Search the Census tables based on a keyword.
         
+        Args:
+            keyword (str): Keyword from ACS table title.
+            
         Returns:
             pd.DataFrame: Formatted table of matching results generated from the keyword.
-        
-        **Source code in:** `homestock/homestock.py`
         """
         # Prompt user for keyword input
         keyword = input("Enter a keyword to search Census tables: ").lower()
@@ -347,14 +343,15 @@ class CensusData:
             print(f"\nNo matching Census Tables found for '{keyword}'. Try another term!")
     
     def get_acs_data():
-         """
-        Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years,
-        and offers CSV export option.
-    
+        """Fetch ACS data at various geographic levels with interactive prompts.
+        
+        Prompts user for inputs, fetches ACS data at various geographic levels, 
+        supports multiple years, and offers CSV export option.
+        
         Returns:
             pd.DataFrame: If one year requested
             dict: Dictionary of {year: pd.DataFrame} if multiple years requested
-    
+            
         Note: This interactive function prompts for:
             - API Key (required)
             - Table ID (e.g., "B19001")
@@ -363,8 +360,6 @@ class CensusData:
             - Geography level
             - State/county details (when applicable)
             - CSV export options
-    
-        Source code in: homestock/homestock.py
         """
         print("Welcome to the ACS Data Fetcher!")
 
@@ -547,10 +542,8 @@ class CensusData:
 
     def get_acs_data_manually(c, acs_survey, geography, year, fields, state_fips, geo_params, 
                             save_csv=False, output_dir=None):
-        """
-        Fetches data for specific geography and returns a pandas DataFrame.
-        Optionally saves the data to a CSV file.
-    
+        """Fetch data for specific geography and return a pandas DataFrame.
+        
         Args:
             c (Census): Census API client
             acs_survey (str): 'acs1' or 'acs5'
@@ -561,11 +554,9 @@ class CensusData:
             geo_params (dict): Additional geography-specific parameters
             save_csv (bool, optional): Whether to save to CSV. Defaults to False.
             output_dir (str, optional): Directory for CSV export. Defaults to current directory.
-    
+            
         Returns:
             pd.DataFrame: DataFrame containing the fetched data
-    
-        Source code in: homestock/homestock.py
         """
         # Fetch the raw data
         raw_data = _fetch_raw_data(c, acs_survey, geography, year, fields, state_fips, geo_params)
