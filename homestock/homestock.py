@@ -516,7 +516,7 @@ class CensusData:
                 }
 
                 # Fetch data based on geography
-                data = fetch_geography_data(
+                data = self.get_acs_data_manually(
                     c, acs_survey, geography, year, fields, state_fips, geo_params
                 )
 
@@ -560,55 +560,8 @@ class CensusData:
                 return dfs.get(years[0], pd.DataFrame())
             return dfs
 
-    def get_acs_data_manually(c, acs_survey, geography, year, fields, state_fips, geo_params, 
-                            save_csv=False, output_dir=None):
-        """Fetch data for specific geography and return a pandas DataFrame.
-        
-        Args:
-            c (Census): Census API client
-            acs_survey (str): 'acs1' or 'acs5'
-            geography (str): Geographic level (e.g., 'State', 'County')
-            year (int): Year of data
-            fields (list): List of variable names to fetch
-            state_fips (str): State FIPS code (if needed for geography)
-            geo_params (dict): Additional geography-specific parameters
-            save_csv (bool, optional): Whether to save to CSV. Defaults to False.
-            output_dir (str, optional): Directory for CSV export. Defaults to current directory.
-            
-        Returns:
-            pd.DataFrame: DataFrame containing the fetched data
-        """
-        # Fetch the raw data
-        raw_data = _fetch_raw_data(c, acs_survey, geography, year, fields, state_fips, geo_params)
-
-        if not raw_data:
-            print(f"No data returned for {geography} in {year}")
-            return pd.DataFrame()
-
-        # Convert to DataFrame
-        df = pd.DataFrame(raw_data)
-
-        # Add metadata columns
-        df['year'] = year
-        df['survey'] = acs_survey
-        df['geography'] = geography
-
-        # Save to CSV if requested
-        if save_csv:
-            output_dir = output_dir or os.getcwd()
-            os.makedirs(output_dir, exist_ok=True)
-
-            # Create descriptive filename
-            filename = f"acs_{year}_{acs_survey}_{geography.replace('/', '_')}.csv"
-            filepath = os.path.join(output_dir, filename)
-
-            df.to_csv(filepath, index=False)
-            print(f"Data saved to {filepath}")
-
-        return df
-
-    def _fetch_raw_data(c, acs_survey, geography, year, fields, state_fips, geo_params):
-        """Helper function that contains the original fetching logic"""
+    def get_acs_data_manually(self, c, acs_survey, geography, year, fields, state_fips, geo_params):
+        """Fetch raw Census data for given parameters (renamed from fetch_geography_data)."""
         if geography == "Nation":
             print("Fetching data for the Nation...")
             return getattr(c, acs_survey).us(fields, year=year)
@@ -634,6 +587,51 @@ class CensusData:
                 print(f"Fetching data for {county_name} County...")
                 return getattr(c, acs_survey).state_county(fields, state_fips, county_fips, year=year)
 
-        # ... [rest of the original geography handling code] ...
+        # Handle other geography types (Place, Tract, etc.)
+        elif geography == "Place":
+            place_id = geo_params.get('place_id', '*')
+            print(f"Fetching data for Place ID: {place_id}")
+            return getattr(c, acs_survey).state_place(fields, state_fips, place_id, year=year)
 
-        return None
+        elif geography == "Census Tract":
+            tract_id = geo_params.get('tract_id', '*')
+            county_name = geo_params['county_name']
+            print(f"Fetching data for Census Tract: {tract_id} in {county_name} County")
+            return getattr(c, acs_survey).state_county_tract(fields, state_fips, county_name, tract_id, year=year)
+
+        # Add other geography types as needed
+        else:
+            raise ValueError(f"Unsupported geography type: {geography}")
+
+    def get_acs_data_manually_programmatic(self, c, acs_survey, geography, year, fields, 
+                                         state_fips, geo_params, save_csv=False, 
+                                         output_dir=None):
+        """Programmatic version of ACS data fetcher (no user prompts)."""
+        # Fetch the raw data using the renamed method
+        raw_data = self.get_acs_data_manually(
+            c, acs_survey, geography, year, fields, state_fips, geo_params
+        )
+
+        if not raw_data:
+            print(f"No data returned for {geography} in {year}")
+            return pd.DataFrame()
+
+        # Convert to DataFrame
+        df = pd.DataFrame(raw_data)
+
+        # Add metadata columns
+        df['year'] = year
+        df['survey'] = acs_survey
+        df['geography'] = geography
+
+        # Save to CSV if requested
+        if save_csv:
+            output_dir = output_dir or os.getcwd()
+            os.makedirs(output_dir, exist_ok=True)
+
+            filename = f"acs_{year}_{acs_survey}_{geography.replace('/', '_')}.csv"
+            filepath = os.path.join(output_dir, filename)
+            df.to_csv(filepath, index=False)
+            print(f"Data saved to {filepath}")
+
+        return df
