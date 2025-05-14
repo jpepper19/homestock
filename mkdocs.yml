@@ -1,5 +1,5 @@
 site_name: homestock
-site_description: homestock scrapes US Census Bureau data to calculate attainable housing stock for each census tract within a selected county.
+site_description: homestock makes it easier to access and visualize US Census Bureau American Community Survey data in Python.
 site_author: jpepper19
 site_url: https://jpepper19.github.io/homestock
 repo_url: https://github.com/jpepper19/homestock
