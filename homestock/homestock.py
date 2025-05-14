@@ -319,10 +319,10 @@ class CensusData:
         Searches the Census tables in `acs_tables.csv` based on a keyword. Returns matching Table ID, Table Title, and Year in a formatted table.
     
         **Parameters:**
-        | Parameter | Type | Description |
-        |-----------|------|-------------|
-        | `keyword` | `str` | Search term to match against table titles |
-        | `year` | `int`, optional | Filter results by specific year (default: None) |
+            | Parameter | Type | Description |
+            |-----------|------|-------------|
+            | `keyword` | `str` | Search term to match against table titles |
+            | `year` | `int`, optional | Filter results by specific year (default: None) |
         
         **Returns:**
         - `pd.DataFrame`: Formatted table of matching results
@@ -353,15 +353,15 @@ class CensusData:
         Prompts user for inputs, fetches ACS data at various geographic levels, supports multiple years, and offers CSV export option. Returns a dictionary of DataFrames (keyed by year) or a single DataFrame.
 
         **Interactive prompts will request:**
-        - **API Key**: Your Census API key (required)
-        - **Table ID**: The ACS table ID (e.g., "B19001")
-        - **Year(s)**: Comma-separated years (e.g., "2018,2019,2020")
-        - **Survey Type**: "1" (1-year) or "5" (5-year ACS)
-        - **Geography Level**: Select from available options (State, County, etc.)
-        - **State Name**: If required for selected geography
-        - **County/Place Details**: If applicable for selected geography
-        - **CSV Export**: Option to save results (y/n)
-        - **Output Directory**: If CSV export selected
+            - **API Key**: Your Census API key (required)
+            - **Table ID**: The ACS table ID (e.g., "B19001")
+            - **Year(s)**: Comma-separated years (e.g., "2018,2019,2020")
+            - **Survey Type**: "1" (1-year) or "5" (5-year ACS)
+            - **Geography Level**: Select from available options (State, County, etc.)
+            - **State Name**: If required for selected geography
+            - **County/Place Details**: If applicable for selected geography
+            - **CSV Export**: Option to save results (y/n)
+            - **Output Directory**: If CSV export selected
         
         **Returns:**
         - Single `pd.DataFrame` if one year requested
@@ -555,18 +555,18 @@ class CensusData:
         Optionally saves the data to a CSV file.
 
         **Parameters:**
-        | Parameter | Type | Description |
-        |-----------|------|-------------|
-        | `c` | `Census` | Census API client |
-        | `acs_survey` | `str` | 'acs1' or 'acs5' |
-        | `geography` | `str` | Geographic level (e.g., 'State', 'County') |
-        | `year` | `int` | Year of data |
-        | `fields` | `list` | List of variable names to fetch |
-        | `state_fips` | `str` | State FIPS code (if needed for geography) |
-        | `geo_params` | `dict` | Additional geography-specific parameters |
-        | `save_csv` | `bool`, optional | Whether to save the data to CSV (default: `False`) |
-        | `output_dir` | `str`, optional | Directory to save CSV (defaults to current directory) |
-        
+            | Parameter | Type | Description |
+            |-----------|------|-------------|
+            | `c` | `Census` | Census API client |
+            | `acs_survey` | `str` | 'acs1' or 'acs5' |
+            | `geography` | `str` | Geographic level (e.g., 'State', 'County') |
+            | `year` | `int` | Year of data |
+            | `fields` | `list` | List of variable names to fetch |
+            | `state_fips` | `str` | State FIPS code (if needed for geography) |
+            | `geo_params` | `dict` | Additional geography-specific parameters |
+            | `save_csv` | `bool`, optional | Whether to save the data to CSV (default: `False`) |
+            | `output_dir` | `str`, optional | Directory to save CSV (defaults to current directory) |
+            
         **Returns:**
         - `pd.DataFrame`: DataFrame containing the fetched data
         
