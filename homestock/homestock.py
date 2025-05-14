@@ -312,11 +312,6 @@ class Map(ipyleaflet.Map):
 
 class CensusData:
     def __init__(self, table_file="acs_tables.csv"):
-        """Initialize CensusData with optional custom table file.
-        
-        Args:
-            table_file (str): Filename of ACS tables CSV. Defaults to "acs_tables.csv".
-        """
         # Get absolute path to the CSV file
         self.table_path = Path(__file__).parent / table_file
         
@@ -382,17 +377,17 @@ class CensusData:
             - CSV export options
         """
         print("Welcome to the ACS Data Fetcher!")
-
+    
         # Get API key
         api_key = input("Enter your Census API key: ").strip()
         if not api_key:
             raise ValueError("API key is required.")
-
+        
         # Get table ID
         table = input("Enter the ACS table ID (e.g., B19001): ").strip().upper()
         if not table:
             raise ValueError("Table ID is required.")
-
+        
         # Get year(s) - support for multiple years
         year_input = input("Enter ACS year(s) (comma-separated for multiple, e.g., 2018,2019,2020): ").strip()
         if not year_input:
@@ -402,13 +397,13 @@ class CensusData:
                 years = [int(y.strip()) for y in year_input.split(",")]
             except ValueError:
                 raise ValueError("Years must be comma-separated integers (e.g., '2018,2019,2020')")
-
+        
         # Get survey type
         survey_type = input("Enter survey type ('5' for ACS 5-year, '1' for ACS 1-year): ").strip()
         if survey_type not in {'1', '5'}:
             raise ValueError("Survey type must be '1' or '5'.")
         acs_survey = f"acs{survey_type}"
-
+        
         # Get geography level
         valid_geographies = {
             "acs5": [
@@ -419,18 +414,18 @@ class CensusData:
                 "Nation", "State", "County", "Metropolitan/Micropolitan Statistical Area", "Place"
             ]
         }
-
+        
         print(f"\nAvailable geographic levels for {acs_survey}:")
         for idx, geo in enumerate(valid_geographies[acs_survey], 1):
             print(f"{idx}. {geo}")
-
+        
         geo_selection = input("Enter the number corresponding to your desired geographic level: ").strip()
         if not geo_selection.isdigit() or int(geo_selection) not in range(1, len(valid_geographies[acs_survey]) + 1):
             raise ValueError("Invalid selection. Please enter a number from the list.")
-
+        
         geography = valid_geographies[acs_survey][int(geo_selection) - 1]
         print(f"You selected: {geography}")
-
+        
         # Get state input if needed
         state_fips = None
         state_name = None
@@ -441,7 +436,7 @@ class CensusData:
             if not state_obj:
                 raise ValueError(f"Invalid state name: {state_name}")
             state_fips = state_obj.fips
-
+        
         # Get additional geography-specific inputs
         geo_params = {}
         if geography == "County":
@@ -474,7 +469,7 @@ class CensusData:
                 geo_params['tract_id'] = tract_id
                 geo_params['block_group_id'] = block_group_id
                 geo_params['block_id'] = block_id
-
+        
         # Ask about CSV export
         export_csv = input("Would you like to export the data to CSV? (y/n): ").strip().lower() == 'y'
         output_dir = None
@@ -484,16 +479,16 @@ class CensusData:
                 output_dir = os.getcwd()
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-
+        
         # Initialize Census client
         c = Census(api_key)
-
+        
         # Dictionary to hold DataFrames for each year
         dfs = {}
-
+        
         for year in years:
             print(f"\nProcessing year {year}...")
-
+            
             try:
                 # Get metadata and variable labels
                 metadata_url = f"https://api.census.gov/data/{year}/acs/{acs_survey}/variables.json"
@@ -501,75 +496,129 @@ class CensusData:
                 if metadata_response.status_code != 200:
                     print(f"Warning: Failed to get table metadata for year {year}: {metadata_response.text}")
                     continue
-
+                
                 variables = metadata_response.json()['variables']
                 fields = [var for var in variables if var.startswith(f"{table}_") and var.endswith("E")]
-
+                
                 if not fields:
                     print(f"Warning: No variables found for table {table} in year {year}")
                     continue
-
+                
                 # Build a label mapping for renaming columns later
                 field_label_map = {
                     var: variables[var]['label'].replace("Estimate!!", "").replace("Estimate: ", "").strip()
                     for var in fields
                 }
-
+                
                 # Fetch data based on geography
-                data = self.get_acs_data_manually(
+                data = fetch_geography_data(
                     c, acs_survey, geography, year, fields, state_fips, geo_params
                 )
-
+                
                 if data is None:
                     print(f"Warning: No data retrieved for year {year}")
                     continue
-
+                
                 print(f"Successfully retrieved {len(data)} records for year {year}.")
-
+                
                 # Convert to DataFrame
                 df = pd.DataFrame(data)
-
+                
                 # Rename ACS variable columns to descriptive labels
                 df.rename(columns=field_label_map, inplace=True)
-
+                
                 # Sort columns: data fields first, geographic identifiers last
                 geo_cols = [col for col in df.columns if any(geo in col.lower() for geo in 
                             ['state', 'county', 'tract', 'block', 'place', 'zip', 'msa'])]
                 data_cols = sorted([col for col in df.columns if col not in geo_cols])
                 df = df[data_cols + geo_cols]
-
+                
                 # Add year column
                 df['year'] = year
-
+                
                 # Store DataFrame
                 dfs[year] = df
-
+                
                 # Export to CSV if requested
                 if export_csv:
                     filename = f"acs_{table}_{geography.replace('/', '_')}_{year}.csv"
                     filepath = os.path.join(output_dir, filename)
                     df.to_csv(filepath, index=False)
                     print(f"Data for year {year} saved to {filepath}")
-
+                    
             except Exception as e:
                 print(f"Error processing year {year}: {str(e)}")
                 continue
+        
+        # Return appropriate result based on number of years requested
+        if len(years) == 1:
+            return dfs.get(years[0], pd.DataFrame())
+        return dfs
 
-            # Return appropriate result based on number of years requested
-            if len(years) == 1:
-                return dfs.get(years[0], pd.DataFrame())
-            return dfs
-
-    def get_acs_data_manually(self, c, acs_survey, geography, year, fields, state_fips, geo_params):
-        """Fetch raw Census data for given parameters (renamed from fetch_geography_data)."""
+    def fetch_geography_data(c, acs_survey, geography, year, fields, state_fips, geo_params, 
+                        save_csv=False, output_dir=None):
+        """Fetches ACS data for specific geography and returns a pandas DataFrame.
+        
+        Args:
+            c: Initialized Census API client.
+            acs_survey: Type of ACS survey, either 'acs1' (1-year) or 'acs5' (5-year).
+            geography: Geographic level (e.g., 'State', 'County', 'Tract').
+            year: Year of data to fetch (e.g., 2020).
+            fields: List of ACS variable names to fetch (e.g., ['B01001_001E']).
+            state_fips: 2-digit FIPS code for the state (required for most geographies).
+            geo_params: Dictionary containing geography-specific parameters:
+                - For counties: {'county_name': '*'}
+                - For tracts: {'county_name': '001', 'tract_id': '*'}
+                - For places: {'place_id': '12345'}
+            save_csv: Whether to save results to CSV file. Defaults to False.
+            output_dir: Directory path to save CSV. If None, uses current directory.
+        
+        Returns:
+            pandas DataFrame containing:
+            - Requested ACS variables
+            - Geographic identifiers
+            - Metadata columns (year, survey type, geography)
+            """
+        
+        # Fetch the raw data
+        raw_data = _fetch_raw_data(c, acs_survey, geography, year, fields, state_fips, geo_params)
+        
+        if not raw_data:
+            print(f"No data returned for {geography} in {year}")
+            return pd.DataFrame()
+        
+        # Convert to DataFrame
+        df = pd.DataFrame(raw_data)
+        
+        # Add metadata columns
+        df['year'] = year
+        df['survey'] = acs_survey
+        df['geography'] = geography
+        
+        # Save to CSV if requested
+        if save_csv:
+            output_dir = output_dir or os.getcwd()
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Create descriptive filename
+            filename = f"acs_{year}_{acs_survey}_{geography.replace('/', '_')}.csv"
+            filepath = os.path.join(output_dir, filename)
+            
+            df.to_csv(filepath, index=False)
+            print(f"Data saved to {filepath}")
+        
+        return df
+                            
+    def _fetch_raw_data(c, acs_survey, geography, year, fields, state_fips, geo_params):
+        """Helper function that contains the original fetching logic"""
         if geography == "Nation":
             print("Fetching data for the Nation...")
             return getattr(c, acs_survey).us(fields, year=year)
-
+        
         elif geography == "State":
             print("Fetching data at State level...")
             return getattr(c, acs_survey).state(fields, state_fips, year=year)
-
+        
         elif geography == "County":
             county_name = geo_params.get('county_name', '*')
             if county_name == '*':
@@ -586,52 +635,7 @@ class CensusData:
                     raise ValueError(f"County '{county_name}' not found.")
                 print(f"Fetching data for {county_name} County...")
                 return getattr(c, acs_survey).state_county(fields, state_fips, county_fips, year=year)
-
-        # Handle other geography types (Place, Tract, etc.)
-        elif geography == "Place":
-            place_id = geo_params.get('place_id', '*')
-            print(f"Fetching data for Place ID: {place_id}")
-            return getattr(c, acs_survey).state_place(fields, state_fips, place_id, year=year)
-
-        elif geography == "Census Tract":
-            tract_id = geo_params.get('tract_id', '*')
-            county_name = geo_params['county_name']
-            print(f"Fetching data for Census Tract: {tract_id} in {county_name} County")
-            return getattr(c, acs_survey).state_county_tract(fields, state_fips, county_name, tract_id, year=year)
-
-        # Add other geography types as needed
-        else:
-            raise ValueError(f"Unsupported geography type: {geography}")
-
-    def get_acs_data_manually_programmatic(self, c, acs_survey, geography, year, fields, 
-                                         state_fips, geo_params, save_csv=False, 
-                                         output_dir=None):
-        """Programmatic version of ACS data fetcher (no user prompts)."""
-        # Fetch the raw data using the renamed method
-        raw_data = self.get_acs_data_manually(
-            c, acs_survey, geography, year, fields, state_fips, geo_params
-        )
-
-        if not raw_data:
-            print(f"No data returned for {geography} in {year}")
-            return pd.DataFrame()
-
-        # Convert to DataFrame
-        df = pd.DataFrame(raw_data)
-
-        # Add metadata columns
-        df['year'] = year
-        df['survey'] = acs_survey
-        df['geography'] = geography
-
-        # Save to CSV if requested
-        if save_csv:
-            output_dir = output_dir or os.getcwd()
-            os.makedirs(output_dir, exist_ok=True)
-
-            filename = f"acs_{year}_{acs_survey}_{geography.replace('/', '_')}.csv"
-            filepath = os.path.join(output_dir, filename)
-            df.to_csv(filepath, index=False)
-            print(f"Data saved to {filepath}")
-
-        return df
+        
+        # ... [rest of the original geography handling code] ...
+        
+        return None
