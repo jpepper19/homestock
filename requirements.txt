@@ -3,7 +3,6 @@ black[jupyter]
 build
 bump-my-version
 census
-csv
 click
 codespell
 flake8
