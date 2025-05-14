@@ -1,6 +1,6 @@
 [project]
 name = "homestock"
-version = "1.5.2"
+version = "1.6"
 dynamic = [
     "dependencies",
 ]
