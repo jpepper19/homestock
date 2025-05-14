@@ -5,6 +5,7 @@ Main Homestock Module.
 import csv
 import requests
 from tabulate import tabulate
+from pathlib import Path  # Add this import
 from census import Census
 import us
 import pandas as pd
@@ -312,10 +313,9 @@ class Map(ipyleaflet.Map):
 
 class CensusData:
     def __init__(self, table_file="acs_tables.csv"):
-        # Get absolute path to the CSV file
+        """Initialize with path handling using pathlib.Path."""
         self.table_path = Path(__file__).parent / table_file
         
-        # Verify file exists at initialization
         if not self.table_path.exists():
             raise FileNotFoundError(f"ACS tables file not found at: {self.table_path}")
 
