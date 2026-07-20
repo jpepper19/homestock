@@ -10,13 +10,13 @@ theme:
   name: material
   palette:
     - scheme: default
-      primary: green       
-      accent: "light green"  
+      primary: green
+      accent: "light green"
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - scheme: slate
-      primary: green       
+      primary: green
       accent: "light green"
       toggle:
         icon: material/toggle-switch
