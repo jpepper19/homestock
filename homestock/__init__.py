@@ -2,7 +2,10 @@
 
 from .homestock import CensusData, Map  # Import the classes from your module
 
-__all__ = ['CensusData', 'Map']  # Explicitly define what gets imported with `from homestock import *`
+__all__ = [
+    "CensusData",
+    "Map",
+]  # Explicitly define what gets imported with `from homestock import *`
 
 __author__ = """Joshua Pepper"""
 __email__ = "jepepper19@gmail.com"
